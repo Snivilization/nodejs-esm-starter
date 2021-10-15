@@ -4,6 +4,10 @@
   "description": "Starter project for NodeJs esm packages, with esbuild, typescript, mocha, chai, eslint, istanbul/nyc, gulp",
   "type": "module",
   "main": "src/main.js",
+  "exports": {
+    ".": "./src/main.js",
+    "./package.json": "./package.json"
+  },
   "files": [
     "src"
   ],
