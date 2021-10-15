@@ -2,9 +2,13 @@
   "name": "nodejs-esm-starter",
   "version": "1.0.0",
   "description": "Starter project for NodeJs esm packages, with esbuild, typescript, mocha, chai, eslint, istanbul/nyc, gulp",
-  "main": "index.js",
+  "type": "module",
+  "main": "src/main.js",
+  "files": [
+    "src"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/tryout.js"
   },
   "private": true,
   "repository": {
