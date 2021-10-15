@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-esm-starter",
+  "version": "1.0.0",
+  "description": "Starter project for NodeJs esm packages, with esbuild, typescript, mocha, chai, eslint, istanbul/nyc, gulp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Snivilization/nodejs-esm-starter.git"
+  },
+  "keywords": [
+    "esm",
+    "nodejs"
+  ],
+  "author": "plastikfan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Snivilization/nodejs-esm-starter/issues"
+  },
+  "homepage": "https://github.com/Snivilization/nodejs-esm-starter#readme"
+}
