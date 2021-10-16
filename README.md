@@ -3,3 +3,81 @@
 Starter project for NodeJs esm packages, with esbuild, typescript, mocha, chai, eslint, istanbul/nyc, gulp
 
 :gift: This starter was created from the information gleaned from the excellent suite of articles written by 'Gil Tayar': [Using ES Modules (ESM) in Node.js: A Practical Guide (Part 1)](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-1/), which I would highly recommend to anyone wishing to get a full understanding of ESM modules with NodeJS and provides the full picture lacking in other offical documentation sources.
+
+
+## package.json features
+
+### :gem: ESM module
+
+```json
+  "type": "module",
+```
+
+:mortar_board: See: [Using the .js extension for ESM](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-1/#using-the-.js-extension-for-esm)
+
+This entry makes the packaage an __esm__ module and means that we don't have to use the .mjs extension to indicate a module is __esm__; doing so causes problems with some tooling.
+
+### :gem: The 'exports' field
+
+```json
+  "exports": {
+    ".": "./src/main.js"
+  },
+```
+
+:mortar_board: See: [The 'exports' field](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-2/#the-exports-field)
+
+The correct way to define a package's entry point in __esm__ is to specify the __exports__ field and it must start with a '.' as illustrated.
+
+Using the __exports__ field prevents deep linking into the package; we're are restricted to using the entry points defined in __exports__ only.
+
+#### :sparkles: Self referencing
+
+```json
+  "exports": {
+    ".": "./src/main.js",
+    "./package.json": "./package.json"
+  },
+```
+
+:mortar_board: See: [Self referencing](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-2/#self-referencing-the-package)
+
+This means we can use the name of the package on an import instead of a relative path, so a unit test could import like so:
+
+```js
+import {banner} from 'nodejs-esm-starter'
+```
+
+#### :sparkles: Multiple exports
+
+This starter does not come with multiple exports; it would be up to the real packae to define as required, but would look something like:
+
+```json
+  "exports": {
+    ".": "./src/main.js",
+    "./red": "./src/main-red.js",
+    "./blue": "./src/main-blue.js",
+    "./package.json": "./package.json"
+  },
+```
+
+:mortar_board: See: [Multiple exports](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-2/#multiple-exports)
+
+
+#### :sparkles: Dual-mode libraries
+
+This allows the module to be __required__ synchronously by other commonjs packages or __imported__ asynchronously by __esm__ packages. This requires transpilation which we achieve by using ___rollup___.
+
+The '.' entry inside exports is what gives us this dual mode capability:
+
+```json
+  "exports": {
+    ".": {
+      "require": "./lib/main.cjs",
+      "import": "./src/main.js"
+    },
+```
+
+:mortar_board: See: [Dual-mode libraries](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-2/#dual-mode-libraries)
+
+
