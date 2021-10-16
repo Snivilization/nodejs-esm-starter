@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { banner } from '../src/main.js'
+import { banner } from 'nodejs-esm-starter'
 
 assert.strict.match(banner(), /The answer is.*42/)
 
