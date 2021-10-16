@@ -80,4 +80,23 @@ The '.' entry inside exports is what gives us this dual mode capability:
 
 :mortar_board: See: [Dual-mode libraries](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-2/#dual-mode-libraries)
 
+NB: we write our __rollup__ config in a .mjs file because rollup assumes .js is commonjs, so we are forced to use .mjs, regardless of the fact that our package has benn marked as __esm__ via the package.json __type__ property.
+
+##### 'files' entry
+
+```json
+  "files": [
+    "src",
+    "lib"
+  ],
+```
+
+:mortar_board: See: [Transpiling with Rollup](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-2/#transpiling-esm-to-cjs-using-rollup)
+
+Required for dual-mode package.
+
+## Required dev depenencies
+
++ :hammer: dual mode package [rollup](https://www.rollupjs.org) ([npm](https://www.npmjs.com/package/rollup))
++ :hammer: platform independent copy of non js assets [cpr](https://github.com/davglass/cpr) ([npm](https://www.npmjs.com/package/cpr))
 
