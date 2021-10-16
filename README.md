@@ -1,11 +1,16 @@
 # nodejs-esm-starter
 
-Starter project for NodeJs esm packages, with esbuild, typescript, mocha, chai, eslint, istanbul/nyc, gulp
+:warning: STILL UNDER CONSTRUCTION
 
-:gift: This starter was created from the information gleaned from the excellent suite of articles written by 'Gil Tayar': [Using ES Modules (ESM) in Node.js: A Practical Guide (Part 1)](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-1/), which I would highly recommend to anyone wishing to get a full understanding of ESM modules with NodeJS and provides the full picture lacking in other offical documentation sources.
+___Starter project for NodeJs esm packages, with esbuild, typescript, mocha, chai, eslint, istanbul/nyc, gulp___
 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
+[![typescript](https://img.shields.io/badge/TypeScript-007ACC?flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-## package.json features
+:crown: This starter was created from the information gleaned from the excellent suite of articles written by 'Gil Tayar': [Using ES Modules (ESM) in Node.js: A Practical Guide (Part 1)](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-1/), which I would highly recommend to anyone wishing to get a full understanding of ESM modules with NodeJS and provides the full picture lacking in other offical documentation sources/blogs.
+
+## :gift: package.json features
 
 ### :gem: ESM module
 
