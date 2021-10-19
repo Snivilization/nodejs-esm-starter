@@ -3,21 +3,17 @@
   "version": "1.0.0",
   "description": "Starter project for NodeJs esm packages, with esbuild, typescript, mocha, chai, eslint, istanbul/nyc, gulp",
   "type": "module",
-  "main": "src/main.js",
-  "exports": {
-    ".": {
-      "require": "./lib/main.cjs",
-      "import": "./src/main.js"
-    },
-    "./package.json": "./package.json"
-  },
+  "main": "./lib/main.js",
+  "exports": "./lib/main.js",
   "files": [
     "src",
     "lib"
   ],
   "scripts": {
-    "build": "rollup -c && cpr src/text.txt lib/ --overwrite",
-    "test": "node test/tryout.js && node test/tryout.cjs"
+    "build": "tsc && cpr src/text.txt lib/ --overwrite",
+    "clean": "rimraf dist/* && rimraf lib/*",
+    "build:r": "rollup -c && cpr src/text.txt lib/ --overwrite",
+    "test": "node test/tryout.js"
   },
   "private": true,
   "repository": {
@@ -35,7 +31,10 @@
   },
   "homepage": "https://github.com/Snivilization/nodejs-esm-starter#readme",
   "devDependencies": {
+    "@types/node": "^16.11.1",
     "cpr": "^3.0.1",
-    "rollup": "^2.58.0"
+    "rimraf": "^3.0.2",
+    "rollup": "^2.58.0",
+    "typescript": "^4.4.4"
   }
 }
