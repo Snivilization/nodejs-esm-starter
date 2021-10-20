@@ -3,16 +3,18 @@
   "version": "1.0.0",
   "description": "Starter project for NodeJs esm packages, with esbuild, typescript, mocha, chai, eslint, istanbul/nyc, gulp",
   "type": "module",
-  "main": "./lib/main.js",
-  "exports": "./lib/main.js",
+  "main": "./dist/starter-bundle.js",
+  "exports": "./dist/starter-bundle.js",
   "files": [
     "src",
     "lib"
   ],
   "scripts": {
-    "build": "tsc && cpr src/text.txt lib/ --overwrite",
-    "clean": "rimraf dist/* && rimraf lib/*",
-    "build:r": "rollup -c && cpr src/text.txt lib/ --overwrite",
+    "roll": "rollup -c rollup.config.mjs",
+    "clean": "rimraf dist/* && rimraf out-tsc/* && rimraf out-tsc/* && rimraf lib/*",
+    "build": "npm run clean && tsc && rollup -c rollup.config.mjs && cpr src/text.txt dist/ --overwrite",
+    "_build:t": "tsc && cpr src/text.txt lib/ --overwrite",
+    "_build:r": "rollup -c && cpr src/text.txt lib/ --overwrite",
     "test": "node test/tryout.js"
   },
   "private": true,
