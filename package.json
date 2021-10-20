@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Starter project for NodeJs esm packages, with esbuild, typescript, mocha, chai, eslint, istanbul/nyc, gulp",
   "type": "module",
-  "main": "./dist/starter-bundle.js",
-  "exports": "./dist/starter-bundle.js",
+  "main": "./dist/nodejs-esm-starter-bundle.js",
+  "exports": "./dist/nodejs-esm-starter-bundle.js",
   "files": [
     "src",
     "lib"
@@ -37,6 +37,7 @@
     "cpr": "^3.0.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.58.0",
+    "rollup-plugin-terser": "^7.0.2",
     "typescript": "^4.4.4"
   }
 }
