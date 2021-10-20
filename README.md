@@ -2,7 +2,7 @@
 
 :warning: STILL UNDER CONSTRUCTION
 
-___Starter project for NodeJs esm packages, with esbuild, typescript, mocha, chai, eslint, istanbul/nyc, gulp___
+___Starter project for NodeJs esm packages, with [rollup](https://rollupjs.org), [typescript](https://www.typescriptlang.org/), [mocha](https://mochajs.org/), [chai](https://www.chaijs.com/), [eslint](https://eslint.org/), [istanbul/nyc](https://istanbul.js.org/), [gulp](https://gulpjs.com/)___
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
@@ -21,6 +21,8 @@ ___Starter project for NodeJs esm packages, with esbuild, typescript, mocha, cha
 :mortar_board: See: [Using the .js extension for ESM](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-1/#using-the-.js-extension-for-esm)
 
 This entry makes the packaage an __esm__ module and means that we don't have to use the .mjs extension to indicate a module is __esm__; doing so causes problems with some tooling.
+
+TODO: investigate using the [__esm__](https://github.com/standard-things/esm) module to provide dual-mode setup.
 
 ### :gem: The 'exports' field
 
@@ -104,4 +106,11 @@ Required for dual-mode package.
 
 + :hammer: dual mode package [rollup](https://www.rollupjs.org) ([npm](https://www.npmjs.com/package/rollup))
 + :hammer: platform independent copy of non js assets [cpr](https://github.com/davglass/cpr) ([npm](https://www.npmjs.com/package/cpr))
++ :hammer: merge json objects (used to derive test rollup config from the source config) [deepmerge](https://github.com/TehShrike/deepmerge) ([npm](https://www.npmjs.com/package/deepmerge))
+
+## Other external resources
+
+Here's a list of other links that were consulted duration the creation of this starter template
+
++ [Typescript, NodeJS and ES6/ESM Modules](https://dev.to/asteinarson/typescript-nodejs-and-es6-esm-modules-18ea)
 

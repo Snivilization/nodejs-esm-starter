@@ -1,24 +1,33 @@
 
-import { terser } from 'rollup-plugin-terser';
-
-// Can't easily import json yet inside esm so we have to go round the houses
-//
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const pkg = require("./package.json");
+const { name } = require("./package.json");
+
+import typescript from "@rollup/plugin-typescript";
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs'
+
+import { terser } from 'rollup-plugin-terser';
 
 const minify = {
   module: true
 }
 
 export default {
-  input: './out-tsc/main.js',
+  input: './src/main.ts',
   output: {
-    "format": "es",
-    file: `dist/${pkg.name}-bundle.js`,
-    "plugins": [terser(minify)],
+    format: "es",
+    file: `dist/${name}-bundle.js`,
+    plugins: [
+      terser(minify)
+    ],
     sourcemap: true
   },
-  plugins: [],
+  plugins: [
+    resolve(),
+    commonjs(),
+    typescript({
+      tsconfig: "./tsconfig.json"
+    })],
   treeshake: true
 }

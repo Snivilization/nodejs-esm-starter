@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.base",
+  "include": ["test/**/*.spec.ts"],
+  "module": "commonjs",
+  "compilerOptions": {
+    "lib": ["es2020", "DOM"],
+    "target": "ES2020",
+
+    "allowJs": false
+  }
+}

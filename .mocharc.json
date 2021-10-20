@@ -1,0 +1,15 @@
+{
+  "extension": [
+    "ts",
+    "js"
+  ],
+  "spec": [
+    "dist/nodejs-esm-starter-bundle.test.js"
+  ],
+  "full-trace": true,
+  "require": [
+    "ts-node/register",
+    "source-map-support"
+  ],
+  "loader": "ts-node/esm"
+}
