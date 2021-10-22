@@ -113,4 +113,11 @@ Required for dual-mode package.
 Here's a list of other links that were consulted duration the creation of this starter template
 
 + [Typescript, NodeJS and ES6/ESM Modules](https://dev.to/asteinarson/typescript-nodejs-and-es6-esm-modules-18ea)
++ [How to Setup a TypeScript project using Rollup.js by Luis Aviles](https://www.thisdot.co/blog/how-to-setup-a-typescript-project-using-rollup-js)
++ [Converting a Webpack Build to Rollup](https://shipshape.io/blog/converting-a-webpack-build-to-rollup/)
++ [How to Create a Hybrid NPM Module for ESM and CommonJS](https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html)
++ [Gulp for Beginners (although this is a bit old - circa 2015)](https://css-tricks.com/gulp-for-beginners/)
 
+:tv: Youtube:
+
++ [Full beginner Gulp setup for SCSS, minifying Javascript, and minifying/webp images](https://www.youtube.com/watch?v=ubHwScDfRQA&t=2s)
