@@ -1,0 +1,36 @@
+{
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    // Modules
+    //
+    "moduleResolution": "node",
+    "module": "esnext",
+    "resolveJsonModule": false,
+
+    // JavaScript Support
+    //
+    "allowJs": true,
+
+    // Emit
+    //
+    "alwaysStrict": true,
+    "sourceMap": true,
+    "noEmitOnError": true,
+
+    // Interop Constraints
+    //
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Type Checking
+    //
+    "noImplicitAny": true,
+    "strict": true,
+    "strictNullChecks": true,
+
+    // Completeness
+    //
+    "skipLibCheck": true,
+    "diagnostics": true
+  }
+}
