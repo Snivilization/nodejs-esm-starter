@@ -23,7 +23,8 @@
     "gulp": "gulp -f gulpfile.esm.mjs",
     "gulpc": "gulp clean -f gulpfile.esm.mjs",
     "prod": "gulp prod -f gulpfile.esm.mjs",
-    "dev": "gulp dev -f gulpfile.esm.mjs"
+    "dev": "gulp dev -f gulpfile.esm.mjs",
+    "watch": "gulp watch -f gulpfile.esm.mjs"
   },
   "private": true,
   "repository": {

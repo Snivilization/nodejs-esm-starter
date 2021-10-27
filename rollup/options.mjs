@@ -11,7 +11,9 @@ import { terser } from 'rollup-plugin-terser';
 // Input
 //
 const input = './src/main.ts';
+const sourceInput = ['src/**/*.ts'];
 const testInput = ['test/**/*.spec.ts'];
+const allInput = [...sourceInput, ...testInput];
 
 const inputOptions = {
   input: input
@@ -57,7 +59,7 @@ function verifyNamedProperty(info) {
   }
 
   if (info.obj[info.name].length === 0) {
-    throw new `${info.context}: object contains empty '${info.name}'' property`;
+    throw new `${info.context}: object contains empty '${info.name}' property`;
   }
 }
 
@@ -72,7 +74,9 @@ function bundleName(options) {
 
 export {
   input,
+  sourceInput,
   testInput,
+  allInput,
   inputOptions,
   outputOptions,
   outDir,
