@@ -2,17 +2,21 @@
 import gulp from 'gulp';
 const series = gulp.series;
 import del from 'del';
-import { outDir } from './rollup/options.mjs';
+import { outDir, allInput } from './rollup/options.mjs';
 
 import { rollup } from 'rollup';
 import * as prodOptions from './rollup.production.mjs'
 import * as devOptions from './rollup.development.mjs'
 
+// clean
+//
 async function cleanTask() {
   return del([`./${outDir}/*.*`]);
 }
 gulp.task('clean', cleanTask);
 
+// production
+//
 async function productionSourceTask() {
   const bundle = await rollup(prodOptions.source);
   await bundle.write(prodOptions.source.output);
@@ -28,6 +32,8 @@ const productionTask = series(
 );
 gulp.task('prod', productionTask);
 
+// development
+//
 async function developmentSourceTask() {
   const bundle = await rollup(devOptions.source);
   await bundle.write(devOptions.source.output);
@@ -43,7 +49,19 @@ const developmentTask = series(
 );
 gulp.task('dev', developmentTask);
 
+// watch
+//
+const watchSequence = series(developmentSourceTask, developmentTestTask);
+const beforeWatch = series(cleanTask, watchSequence);
 
+async function watchTask() {
+  beforeWatch();
+  gulp.watch(allInput, watchSequence);
+}
+gulp.task('watch', watchTask);
+
+// lint
+//
 gulp.task('lint', async () => {
   console.log('---> lint tbd ...')
 });
