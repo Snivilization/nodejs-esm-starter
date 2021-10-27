@@ -9,6 +9,9 @@
     "src",
     "lib"
   ],
+  "engines": {
+    "node": ">=14.17.0"
+  },
   "scripts": {
     "roll": "rollup -c rollup.config.mjs",
     "clean": "rimraf dist/* && rimraf out-tsc/* && rimraf out-tsc/* && rimraf lib/*",
@@ -24,7 +27,9 @@
     "gulpc": "gulp clean -f gulpfile.esm.mjs",
     "prod": "gulp prod -f gulpfile.esm.mjs",
     "dev": "gulp dev -f gulpfile.esm.mjs",
-    "watch": "gulp watch -f gulpfile.esm.mjs"
+    "watch": "gulp watch -f gulpfile.esm.mjs",
+    "lint": "gulp lint -f gulpfile.esm.mjs",
+    "fix": "gulp fix -f gulpfile.esm.mjs"
   },
   "private": true,
   "repository": {
@@ -51,6 +56,8 @@
     "@types/node": "^16.11.1",
     "@types/sinon": "^10.0.4",
     "@types/sinon-chai": "^3.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.2.0",
+    "@typescript-eslint/parser": "^5.2.0",
     "chai": "^4.3.4",
     "cpr": "^3.0.1",
     "cross-env": "^7.0.3",
@@ -58,8 +65,11 @@
     "deepmerge": "^4.2.2",
     "del": "^6.0.0",
     "dirty-chai": "^2.0.1",
+    "eslint": "^8.1.0",
+    "eslint-plugin-node": "^11.1.0",
     "esm": "^3.2.25",
     "gulp": "^4.0.2",
+    "gulp-eslint": "^6.0.0",
     "mocha": "^9.1.3",
     "rimraf": "^3.0.2",
     "rollup": "^2.58.0",

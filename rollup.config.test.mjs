@@ -4,17 +4,17 @@ const require = createRequire(import.meta.url);
 const { name } = require("./package.json");
 
 import typescript from "@rollup/plugin-typescript";
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs'
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
 
-import merge from 'deepmerge';
-import sourceConfig from './rollup.config.mjs';
+import merge from "deepmerge";
+import sourceConfig from "./rollup.config.mjs";
 import entry from "rollup-plugin-multi-entry";
 
-import esformatter from 'rollup-plugin-esformatter';
+import esformatter from "rollup-plugin-esformatter";
 
 const testConfig = {
-  input: ['test/**/*.spec.ts'],
+  input: ["test/**/*.spec.ts"],
   external: ["chai", "mocha", "dirty-chai"],
   output: {
     format: "es",
@@ -31,11 +31,11 @@ const testConfig = {
     }),
     esformatter({
       indent: {
-        value: '  '
+        value: "  "
       }
     })
   ],
-}
+};
 
 // Inherit and override the source rollupp config
 //

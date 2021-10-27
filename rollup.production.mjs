@@ -1,8 +1,9 @@
 
-import * as roptions from './rollup/options.mjs';
-import copy from 'deep-copy-all';
+import * as roptions from "./rollup/options.mjs";
+import copy from "deep-copy-all";
 import multi from "rollup-plugin-multi-entry";
-const mode = 'prod';
+import typescript from "@rollup/plugin-typescript";
+const mode = "prod";
 
 // source, we include the uglifier for the production source code
 // By default, the output is a singular object. This means that it
@@ -22,9 +23,11 @@ sourceOutput.plugins = roptions.productionPlugins;
 const source = {
   input: roptions.input,
   output: sourceOutput,
-  plugins: roptions.universalPlugins,
+  plugins: [...roptions.universalPlugins, typescript({
+    tsconfig: `./${roptions.sourceTsConfigFilename}`
+  })],
   treeshake: roptions.treeshake
-}
+};
 
 // test
 //
@@ -37,8 +40,10 @@ const test = {
   input: roptions.testInput,
   external: roptions.external,
   output: testOutput,
-  plugins: [...roptions.universalPlugins, multi()],
+  plugins: [...roptions.universalPlugins, typescript({
+    tsconfig: `./${roptions.testTsConfigFilename}`
+  }), multi()],
   treeshake: roptions.treeshake
-}
+};
 
-export { source, test }
+export { source, test };
