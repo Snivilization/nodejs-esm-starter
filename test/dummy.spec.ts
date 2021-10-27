@@ -1,12 +1,12 @@
-import { expect, use } from 'chai'
-import dirtyChai from 'dirty-chai'
+import { use } from "chai";
+import dirtyChai from "dirty-chai";
 
-use(dirtyChai)
+use(dirtyChai);
 
-describe('dummy', () => {
-  context('given: something', () => {
-    it('should: do somthing else', () => {
-      console.log('---> not yet implmented')
-    })
-  })
-})
+describe("dummy", () => {
+  context("given: something", () => {
+    it("should: do somthing else", () => {
+      console.log("---> not yet implmented");
+    });
+  });
+});

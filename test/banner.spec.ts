@@ -1,16 +1,16 @@
-import { expect, use } from 'chai'
+import { use } from "chai";
 // import dirtyChai = require('dirty-chai')
-import dirtyChai from 'dirty-chai'
+import dirtyChai from "dirty-chai";
 // import 'mocha'
-use(dirtyChai) // webpack figures out the import suffix: ;
+use(dirtyChai); // webpack figures out the import suffix: ;
 
-describe('blah', () => {
-  context('given: something', () => {
-    it('should: get the magic number', () => {
-      console.log('---> not yet implmented')
-    })
-  })
-})
+describe("blah", () => {
+  context("given: something", () => {
+    it("should: get the magic number", () => {
+      console.log("---> not yet implmented");
+    });
+  });
+});
 
 
 /*

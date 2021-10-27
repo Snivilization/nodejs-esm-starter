@@ -1,0 +1,40 @@
+{
+  "env": {
+    "commonjs": true,
+    "node": true,
+    "browser": true,
+    "es6": true,
+    "mocha": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "semi": ["error"],
+    "quotes": ["error", "double"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-unused-vars": ["error", {
+      "args": "none"
+    }],
+    "@typescript-eslint/no-useless-constructor": "error",
+    "no-useless-constructor": "off",
+    "no-warning-comments": [
+      "warn",
+      {
+        "terms": ["fixme", "removeme", "xxx", "@@@"],
+        "location": "anywhere"
+      }
+    ]
+  }
+}

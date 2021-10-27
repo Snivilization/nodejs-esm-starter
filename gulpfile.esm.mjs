@@ -1,19 +1,25 @@
 
-import gulp from 'gulp';
+import gulp from "gulp";
 const series = gulp.series;
-import del from 'del';
-import { outDir, allInput } from './rollup/options.mjs';
+import del from "del";
+import eslint from "gulp-eslint";
+import { rollup } from "rollup";
+import copy from "deep-copy-all";
 
-import { rollup } from 'rollup';
-import * as prodOptions from './rollup.production.mjs'
-import * as devOptions from './rollup.development.mjs'
+import { outDir, allInput, lintInput } from "./rollup/options.mjs";
+import * as prodOptions from "./rollup.production.mjs";
+import * as devOptions from "./rollup.development.mjs";
+
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const lintOptions = require("./.eslintrc.json");
 
 // clean
 //
 async function cleanTask() {
   return del([`./${outDir}/*.*`]);
 }
-gulp.task('clean', cleanTask);
+gulp.task("clean", cleanTask);
 
 // production
 //
@@ -30,7 +36,7 @@ async function productionTestTask() {
 const productionTask = series(
   cleanTask, productionSourceTask, productionTestTask
 );
-gulp.task('prod', productionTask);
+gulp.task("prod", productionTask);
 
 // development
 //
@@ -47,7 +53,7 @@ async function developmentTestTask() {
 const developmentTask = series(
   cleanTask, developmentSourceTask, developmentTestTask
 );
-gulp.task('dev', developmentTask);
+gulp.task("dev", developmentTask);
 
 // watch
 //
@@ -58,12 +64,29 @@ async function watchTask() {
   beforeWatch();
   gulp.watch(allInput, watchSequence);
 }
-gulp.task('watch', watchTask);
+gulp.task("watch", watchTask);
 
 // lint
 //
-gulp.task('lint', async () => {
-  console.log('---> lint tbd ...')
-});
 
-gulp.task('default', productionTask);
+async function lintTask() {
+  gulp.src(lintInput)
+    .pipe(eslint(lintOptions))
+    .pipe(eslint.format());
+  // .pipe(eslint.failAfterError());
+}
+gulp.task("lint", lintTask);
+
+async function fixTask() {
+  const withFix = copy(lintOptions);
+  withFix.fix = true;
+  gulp.src(lintInput)
+    .pipe(eslint(withFix))
+    .pipe(eslint.format())
+    .pipe(gulp.dest(file => file.base));
+  
+  // .pipe(eslint.failAfterError());
+}
+gulp.task("fix", fixTask);
+
+gulp.task("default", productionTask);

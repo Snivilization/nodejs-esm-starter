@@ -1,8 +1,9 @@
 
-import * as roptions from './rollup/options.mjs';
-import copy from 'deep-copy-all';
+import * as roptions from "./rollup/options.mjs";
+import copy from "deep-copy-all";
 import multi from "rollup-plugin-multi-entry";
-const mode = 'dev';
+import typescript from "@rollup/plugin-typescript";
+const mode = "dev";
 
 // source
 //
@@ -14,9 +15,11 @@ sourceOutput.file = roptions.bundleName({
 const source = {
   input: roptions.input,
   output: sourceOutput,
-  plugins: roptions.universalPlugins,
+  plugins: [...roptions.universalPlugins, typescript({
+    tsconfig: `./${roptions.sourceTsConfigFilename}`
+  })],
   treeshake: roptions.treeshake
-}
+};
 
 // test, just copy from source and override as necessary. If we want to diverge
 // away from the source config, then we can do so by copying roptions.outputOptions
@@ -28,6 +31,8 @@ test.external = roptions.external;
 test.output.file = roptions.bundleName({
   discriminator: `${mode}-test`
 });
-test.plugins = [...test.plugins, multi()]
+test.plugins = [...test.plugins, typescript({
+  tsconfig: `./${roptions.testTsConfigFilename}`
+}), multi()];
 
-export { source, test }
+export { source, test };
