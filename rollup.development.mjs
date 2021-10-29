@@ -9,7 +9,8 @@ const mode = "dev";
 //
 const sourceOutput = copy(roptions.outputOptions);
 sourceOutput.file = roptions.bundleName({
-  discriminator: `${mode}-src`
+  mode: mode,
+  discriminator: "src"
 });
 
 const source = {
@@ -29,8 +30,10 @@ const test = copy(source);
 test.input = roptions.testInput;
 test.external = roptions.external;
 test.output.file = roptions.bundleName({
-  discriminator: `${mode}-test`
+  mode: mode,
+  discriminator: "test"
 });
+
 test.plugins = [...test.plugins, typescript({
   tsconfig: `./${roptions.testTsConfigFilename}`
 }), multi()];

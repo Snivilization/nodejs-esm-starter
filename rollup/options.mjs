@@ -62,13 +62,21 @@ function verifyNamedProperty(info) {
   }
 }
 
+function hasProperty(info) {
+  return Object.defineProperty.hasOwnProperty.call(info.obj, info.name);
+}
+
 function bundleName(options) {
   if (options === null) {
     throw new "bundleName: Missing options object";
   }
-  verifyNamedProperty({ context: "bundleName", obj: options, name: "discriminator" });
+  verifyNamedProperty({ context: "bundleName", obj: options, name: "mode" });
 
-  return `${outDir}/${name}-${options.discriminator}-bundle.js`;
+  const result = (hasProperty({ obj: options, name: "discriminator" })) ?
+    `${outDir}/${name}-${options.mode}-${options.discriminator}-bundle.js` :
+    `${outDir}/${name}-${options.mode}-bundle.js`;
+
+  return result;
 }
 
 export {

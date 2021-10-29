@@ -22,14 +22,15 @@
     "_build:t": "tsc && cpr src/text.txt lib/ --overwrite",
     "_build:r": "rollup -c && cpr src/text.txt lib/ --overwrite",
     "__b:dev:test": "cross-env NODE_ENV=development rollup -c rollup.config.test.mjs",
-    "test": "node test/tryout.js",
+    "test": "gulp dev-mocha",
     "gulp": "gulp -f gulpfile.esm.mjs",
     "gulpc": "gulp clean -f gulpfile.esm.mjs",
     "prod": "gulp prod -f gulpfile.esm.mjs",
     "dev": "gulp dev -f gulpfile.esm.mjs",
     "watch": "gulp watch -f gulpfile.esm.mjs",
     "lint": "gulp lint -f gulpfile.esm.mjs",
-    "fix": "gulp fix -f gulpfile.esm.mjs"
+    "fix": "gulp fix -f gulpfile.esm.mjs",
+    "coverage": "nyc --reporter=lcov --reporter=text npm run test"
   },
   "private": true,
   "repository": {
@@ -70,7 +71,9 @@
     "esm": "^3.2.25",
     "gulp": "^4.0.2",
     "gulp-eslint": "^6.0.0",
+    "gulp-mocha": "^8.0.0",
     "mocha": "^9.1.3",
+    "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.58.0",
     "rollup-plugin-esformatter": "^2.0.1",
