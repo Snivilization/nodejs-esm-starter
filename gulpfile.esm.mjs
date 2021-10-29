@@ -3,6 +3,7 @@ import gulp from "gulp";
 const series = gulp.series;
 import del from "del";
 import eslint from "gulp-eslint";
+import mocha from "gulp-mocha";
 import { rollup } from "rollup";
 import copy from "deep-copy-all";
 
@@ -13,6 +14,7 @@ import * as devOptions from "./rollup.development.mjs";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const lintOptions = require("./.eslintrc.json");
+const mochaOptions = require("./.mocharc.json");
 
 // clean
 //
@@ -20,6 +22,30 @@ async function cleanTask() {
   return del([`./${outDir}/*.*`]);
 }
 gulp.task("clean", cleanTask);
+
+// copy resources
+//
+const resourceSpecs = [
+  {
+    name: "copy text file",
+    source: "./src/text.txt",
+    destination: "./dist"
+  }
+];
+
+const resources = resourceSpecs.reduce((acc, spec) => {
+
+  const copyTask = () => {
+    return gulp.src(spec.source)
+      .pipe(gulp.dest(spec.destination));
+  }
+  acc.push(copyTask);
+
+  return acc;
+}, []);
+
+
+const copyResourcesTask = series(...resources);
 
 // production
 //
@@ -33,8 +59,20 @@ async function productionTestTask() {
   await bundle.write(prodOptions.test.output);
 }
 
+async function productionMochaTask() {
+  console.log(`**** mocha: '${devOptions.test.output.file}' ...`);
+
+  await gulp.src(prodOptions.test.output.file)
+    .pipe(mocha(mochaOptions));
+}
+gulp.task("prod-mocha", productionMochaTask)
+
 const productionTask = series(
-  cleanTask, productionSourceTask, productionTestTask
+  cleanTask,
+  productionSourceTask,
+  productionTestTask,
+  copyResourcesTask,
+  productionMochaTask
 );
 gulp.task("prod", productionTask);
 
@@ -50,8 +88,21 @@ async function developmentTestTask() {
   await bundle.write(devOptions.test.output);
 }
 
+async function developmentMochaTask() {
+  console.log(`**** mocha: '${devOptions.test.output.file}' ...`);
+
+  await gulp.src(devOptions.test.output.file)
+    .pipe(mocha(mochaOptions));
+
+}
+gulp.task("dev-mocha", developmentMochaTask)
+
 const developmentTask = series(
-  cleanTask, developmentSourceTask, developmentTestTask
+  cleanTask,
+  developmentSourceTask,
+  developmentTestTask,
+  copyResourcesTask,
+  developmentMochaTask
 );
 gulp.task("dev", developmentTask);
 
@@ -84,7 +135,7 @@ async function fixTask() {
     .pipe(eslint(withFix))
     .pipe(eslint.format())
     .pipe(gulp.dest(file => file.base));
-  
+
   // .pipe(eslint.failAfterError());
 }
 gulp.task("fix", fixTask);

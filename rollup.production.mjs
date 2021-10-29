@@ -16,7 +16,8 @@ const mode = "prod";
 //
 const sourceOutput = copy(roptions.outputOptions);
 sourceOutput.file = roptions.bundleName({
-  discriminator: `${mode}-src`
+  mode: mode,
+  discriminator: "src"
 });
 sourceOutput.plugins = roptions.productionPlugins;
 
@@ -33,7 +34,8 @@ const source = {
 //
 const testOutput = copy(roptions.outputOptions);
 testOutput.file = roptions.bundleName({
-  discriminator: `${mode}-test`
+  mode: mode,
+  discriminator: "test"
 });
 
 const test = {
