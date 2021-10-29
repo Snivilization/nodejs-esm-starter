@@ -3,7 +3,6 @@ import * as roptions from "./rollup/options.mjs";
 import copy from "deep-copy-all";
 import multi from "rollup-plugin-multi-entry";
 import typescript from "@rollup/plugin-typescript";
-const mode = "prod";
 
 // source, we include the uglifier for the production source code
 // By default, the output is a singular object. This means that it
@@ -16,7 +15,6 @@ const mode = "prod";
 //
 const sourceOutput = copy(roptions.outputOptions);
 sourceOutput.file = roptions.bundleName({
-  mode: mode,
   discriminator: "src"
 });
 sourceOutput.plugins = roptions.productionPlugins;
@@ -34,7 +32,6 @@ const source = {
 //
 const testOutput = copy(roptions.outputOptions);
 testOutput.file = roptions.bundleName({
-  mode: mode,
   discriminator: "test"
 });
 

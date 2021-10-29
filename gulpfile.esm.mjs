@@ -44,7 +44,6 @@ const resources = resourceSpecs.reduce((acc, spec) => {
   return acc;
 }, []);
 
-
 const copyResourcesTask = series(...resources);
 
 // production

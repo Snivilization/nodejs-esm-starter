@@ -3,13 +3,11 @@ import * as roptions from "./rollup/options.mjs";
 import copy from "deep-copy-all";
 import multi from "rollup-plugin-multi-entry";
 import typescript from "@rollup/plugin-typescript";
-const mode = "dev";
 
 // source
 //
 const sourceOutput = copy(roptions.outputOptions);
 sourceOutput.file = roptions.bundleName({
-  mode: mode,
   discriminator: "src"
 });
 
@@ -30,7 +28,6 @@ const test = copy(source);
 test.input = roptions.testInput;
 test.external = roptions.external;
 test.output.file = roptions.bundleName({
-  mode: mode,
   discriminator: "test"
 });
 
