@@ -47,7 +47,10 @@ const productionPlugins = [
   terser(minify)
 ];
 
-const external = ["chai", "mocha", "dirty-chai"];
+// note here, we specify name in the external list because we dont' need to bundle
+// the source into the test bundle.
+//
+const external = ["chai", "mocha", "dirty-chai", name];
 const treeshake = true;
 
 function hasProperty(info) {
