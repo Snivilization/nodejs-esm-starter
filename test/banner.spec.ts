@@ -1,23 +1,14 @@
-import { use } from "chai";
-// import dirtyChai = require('dirty-chai')
+import { expect, use } from "chai";
 import dirtyChai from "dirty-chai";
-// import 'mocha'
-use(dirtyChai); // webpack figures out the import suffix: ;
-
-describe("blah", () => {
-  context("given: something", () => {
-    it("should: get the magic number", () => {
-      console.log("---> not yet implmented");
-    });
-  });
-});
-
-
-/*
-import assert from 'assert'
+use(dirtyChai);
+// @ts-ignore
 import { banner } from 'nodejs-esm-starter'
 
-assert.strict.match(banner(), /The answer is.*42/)
-
-console.log(banner())
-*/
+describe('banner', () => {
+  context("given: banner", () => {
+    it('should: find the answer', () => {
+      const result = banner();
+      expect(result).match(/The answer is.*42/);
+    });
+  })
+});
