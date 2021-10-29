@@ -29,7 +29,6 @@ const inputOptions = {
 const outDir = "dist";
 const outputOptions = {
   format: "es",
-  file: `${outDir}/${name}-bundle.js`,
   sourcemap: true
 };
 
@@ -49,18 +48,7 @@ const productionPlugins = [
 ];
 
 const external = ["chai", "mocha", "dirty-chai"];
-
 const treeshake = true;
-
-function verifyNamedProperty(info) {
-  if (!Object.defineProperty.hasOwnProperty.call(info.obj, info.name)) {
-    throw new `${info.context}: object is missing '${info.name}' property`;
-  }
-
-  if (info.obj[info.name].length === 0) {
-    throw new `${info.context}: object contains empty '${info.name}' property`;
-  }
-}
 
 function hasProperty(info) {
   return Object.defineProperty.hasOwnProperty.call(info.obj, info.name);
@@ -68,13 +56,12 @@ function hasProperty(info) {
 
 function bundleName(options) {
   if (options === null) {
-    throw new "bundleName: Missing options object";
+    throw "bundleName: Missing options object";
   }
-  verifyNamedProperty({ context: "bundleName", obj: options, name: "mode" });
 
   const result = (hasProperty({ obj: options, name: "discriminator" })) ?
-    `${outDir}/${name}-${options.mode}-${options.discriminator}-bundle.js` :
-    `${outDir}/${name}-${options.mode}-bundle.js`;
+    `${outDir}/${name}-${options.discriminator}-bundle.js` :
+    `${outDir}/${name}-bundle.js`;
 
   return result;
 }
