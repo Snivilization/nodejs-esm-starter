@@ -1,6 +1,5 @@
 
 import gulp from "gulp";
-const series = gulp.series;
 import del from "del";
 import eslint from "gulp-eslint";
 import mocha from "gulp-mocha";
@@ -8,8 +7,8 @@ import { rollup } from "rollup";
 import copy from "deep-copy-all";
 
 import { outDir, allInput, lintInput } from "./rollup/options.mjs";
-import * as prodOptions from "./rollup.production.mjs";
-import * as devOptions from "./rollup.development.mjs";
+import * as prodOptions from "./rollup/rollup.production.mjs";
+import * as devOptions from "./rollup/rollup.development.mjs";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -19,11 +18,12 @@ const mochaOptions = require("./.mocharc.json");
 // clean
 //
 async function cleanTask() {
-  return del([`./${outDir}/*.*`]);
+  return del([`${outDir}/**`, `!${outDir}/`]);
 }
 gulp.task("clean", cleanTask);
 
-// copy resources
+// copy resources: just add the resources that need to be copied into
+// this array. If non required, then set resourceSpecs to be an empty array.
 //
 const resourceSpecs = [
   {
@@ -44,7 +44,7 @@ const resources = resourceSpecs.reduce((acc, spec) => {
   return acc;
 }, []);
 
-const copyResourcesTask = series(...resources);
+const copyResourcesTask = gulp.series(...resources);
 
 // production
 //
@@ -59,14 +59,12 @@ async function productionTestTask() {
 }
 
 async function productionMochaTask() {
-  console.log(`**** mocha: '${devOptions.test.output.file}' ...`);
-
   await gulp.src(prodOptions.test.output.file)
     .pipe(mocha(mochaOptions));
 }
 gulp.task("prod-mocha", productionMochaTask);
 
-const productionTask = series(
+const productionTask = gulp.series(
   cleanTask,
   productionSourceTask,
   productionTestTask,
@@ -88,15 +86,12 @@ async function developmentTestTask() {
 }
 
 async function developmentMochaTask() {
-  console.log(`**** mocha: '${devOptions.test.output.file}' ...`);
-
   await gulp.src(devOptions.test.output.file)
     .pipe(mocha(mochaOptions));
-
 }
 gulp.task("dev-mocha", developmentMochaTask);
 
-const developmentTask = series(
+const developmentTask = gulp.series(
   cleanTask,
   developmentSourceTask,
   developmentTestTask,
@@ -107,8 +102,8 @@ gulp.task("dev", developmentTask);
 
 // watch
 //
-const watchSequence = series(developmentSourceTask, developmentTestTask);
-const beforeWatch = series(cleanTask, watchSequence);
+const watchSequence = gulp.series(developmentSourceTask, developmentTestTask);
+const beforeWatch = gulp.series(cleanTask, watchSequence);
 
 async function watchTask() {
   beforeWatch();
@@ -118,12 +113,10 @@ gulp.task("watch", watchTask);
 
 // lint
 //
-
 async function lintTask() {
   gulp.src(lintInput)
     .pipe(eslint(lintOptions))
     .pipe(eslint.format());
-  // .pipe(eslint.failAfterError());
 }
 gulp.task("lint", lintTask);
 
@@ -134,8 +127,6 @@ async function fixTask() {
     .pipe(eslint(withFix))
     .pipe(eslint.format())
     .pipe(gulp.dest(file => file.base));
-
-  // .pipe(eslint.failAfterError());
 }
 gulp.task("fix", fixTask);
 
