@@ -38,7 +38,7 @@ const resources = resourceSpecs.reduce((acc, spec) => {
   const copyTask = () => {
     return gulp.src(spec.source)
       .pipe(gulp.dest(spec.destination));
-  }
+  };
   acc.push(copyTask);
 
   return acc;
@@ -64,7 +64,7 @@ async function productionMochaTask() {
   await gulp.src(prodOptions.test.output.file)
     .pipe(mocha(mochaOptions));
 }
-gulp.task("prod-mocha", productionMochaTask)
+gulp.task("prod-mocha", productionMochaTask);
 
 const productionTask = series(
   cleanTask,
@@ -94,7 +94,7 @@ async function developmentMochaTask() {
     .pipe(mocha(mochaOptions));
 
 }
-gulp.task("dev-mocha", developmentMochaTask)
+gulp.task("dev-mocha", developmentMochaTask);
 
 const developmentTask = series(
   cleanTask,

@@ -1,7 +1,7 @@
 import { expect, use } from "chai";
 import dirtyChai from "dirty-chai";
 // @ts-ignore
-import { add } from 'nodejs-esm-starter'
+import { add } from "nodejs-esm-starter";
 
 use(dirtyChai);
 
