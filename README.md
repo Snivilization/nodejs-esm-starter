@@ -1,7 +1,5 @@
 # nodejs-esm-starter
 
-:warning: STILL UNDER CONSTRUCTION
-
 ___Starter project for NodeJs esm packages, with [rollup](https://rollupjs.org), [typescript](https://www.typescriptlang.org/), [mocha](https://mochajs.org/), [chai](https://www.chaijs.com/), [eslint](https://eslint.org/), [istanbul/nyc](https://istanbul.js.org/), [gulp](https://gulpjs.com/)___
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
@@ -21,8 +19,6 @@ ___Starter project for NodeJs esm packages, with [rollup](https://rollupjs.org),
 :mortar_board: See: [Using the .js extension for ESM](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-1/#using-the-.js-extension-for-esm)
 
 This entry makes the packaage an __esm__ module and means that we don't have to use the .mjs extension to indicate a module is __esm__; doing so causes problems with some tooling.
-
-TODO: investigate using the [__esm__](https://github.com/standard-things/esm) module to provide dual-mode setup.
 
 ### :gem: The 'exports' field
 
@@ -55,9 +51,26 @@ This means we can use the name of the package on an import instead of a relative
 import {banner} from 'nodejs-esm-starter'
 ```
 
+However, there is still an issue with _self referencing_ like this. typescript will appear not be able to resolve that the package name, but in reality there is no problem. Therefore, we need to disable the resultant error. This is achieved at the import site with a typescript directive as illustarted below:
+
+```js
+// @ts-ignore
+import {banner} from 'nodejs-esm-starter'
+```
+
+But that now throws up another issue. What we find now is that when we go to lint the project (just run `npm run lint`), we'll simply be served up an error message of the form:
+
+> 4:1  error  Do not use "@ts-ignore" because it alters compilation errors  @typescript-eslint/ban-ts-comment
+
+It is safe to disable this and we do so by turning off the _ban-ts-comment_ rule in the _.eslintrc.json_ config file inside the "rules" entry:
+
+```json
+"@typescript-eslint/ban-ts-comment": "off",
+```
+
 #### :sparkles: Multiple exports
 
-This starter does not come with multiple exports; it would be up to the real packae to define as required, but would look something like:
+This starter does not come with multiple exports; it would be up to the client package to define as required, but would look something like:
 
 ```json
   "exports": {
@@ -87,9 +100,9 @@ The '.' entry inside exports is what gives us this dual mode capability:
 
 :mortar_board: See: [Dual-mode libraries](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-2/#dual-mode-libraries)
 
-NB: we write our __rollup__ config in a .mjs file because rollup assumes .js is commonjs, so we are forced to use .mjs, regardless of the fact that our package has benn marked as __esm__ via the package.json __type__ property.
+NB: we write our __rollup__ config in a .mjs file because rollup assumes .js is commonjs, so we are forced to use .mjs, regardless of the fact that our package has been marked as __esm__ via the package.json __type__ property.
 
-##### 'files' entry
+##### The 'files' entry
 
 ```json
   "files": [
@@ -102,11 +115,52 @@ NB: we write our __rollup__ config in a .mjs file because rollup assumes .js is 
 
 Required for dual-mode package.
 
-## Required dev depenencies
+## Boilerplate project structure
+
+All _rollup_ related funcitonality is contained within the rollup folder. Currently, there is a separate file for development and production. The main difference between the production and development rollup configs is that for the former, we use the terser plugin to mangle the generated javascript bundle.
+
+### options/production/development
+
+The setup is structured to keep the gulp config encapulated away from the rollup config. This means that the user can discard gulp if they so wish to without it affecting the rollup. The flow of data goes from the root, that being ___rollup/options.mjs___, to either ___rollup.development.mjs___ or ___rollup.production.mjs___ dependending on the current _mode_ which is then finally imported into the gulp file ___gulpfile.esm.mjs___.
+
+It is intended that the user should specify all generic settings in the options.mjs file and export them from there. This way, we can ensure that any properties are defined in a single place only and inherited as required. Clearly, production specific settings should go in the production file and like-wise for development.
+
+### gulp file (gulpfile.esm.mjs)
+
+In order to simplify usage of gulp in the presence of the alternative gulfile name being ___gulpfile.esm.mjs___ (as opposed to the default of simply being ___gulpfile.mjs___), a symbolic link has been defined from ___gulpfile.mjs___ to ___gulpfile.esm.mjs___. This means that the user can run gulp commands without having to explicitly define the gulp file ___gulpfile.esm.mjs___.
+
+#### Copying resources
+
+The gulp file, contains an array definition __resourceSpecs__. By default it contains a single dummy entry that illustrates how to define resource(s) to be copied into the output folder. Each entry in the array should be an object eg:
+
+```js
+  {
+    name: "copy text file",
+    source: "./src/text.txt",
+    destination: `./${outDir}`
+  }
+```
+
+A _copyTask_ is defined composed from a series of tasks defined by __resourceSpecs__. If no resources are to be copied, then just remove this default entry and leave the array to be empty.
+
+## Using this template
+
+After the client project has been created from this template, a number of changes need to be made and are listed as follows:
+
++ Update the `name` property inside package.json. Initially it will be set to _nodejs-esm-starter_. The user should perform a global search and replace inside package.js as there are other entries derived from this name. Ideally, there would be a way in json to be able to cross reference fields, but alas, this is not currently possible.
++ define resources to copy, if any.
++ remove the dummy tests and source dode.
++ ... and then of course, customise the configs as required.
+
+## Required dev depenencies of note
 
 + :hammer: dual mode package [rollup](https://www.rollupjs.org) ([npm](https://www.npmjs.com/package/rollup))
 + :hammer: platform independent copy of non js assets [cpr](https://github.com/davglass/cpr) ([npm](https://www.npmjs.com/package/cpr))
 + :hammer: merge json objects (used to derive test rollup config from the source config) [deepmerge](https://github.com/TehShrike/deepmerge) ([npm](https://www.npmjs.com/package/deepmerge))
+
+## A note about 'vulnerablities' in dev dependencies
+
+An [issue](#17) was raised to try and resolve the problem of _npm audit_ reporting so called vulnerabilities (all relating to gulp dependencies). However, after a lot of head scratching and many failed attempts to resolve, it was discovered that there is a design flaw with _npm audit_. This is a widely known issue and very well documented at a blog post [npm audit: Broken by Design](https://overreacted.io/npm-audit-broken-by-design/). It is for the reasons documented here, that there is no need to attempt to resolve these issues. A custom _audit_ package.json script entry has been defined that specifies the _--production__ flag, (just run `npm run audit`).
 
 ## Other external resources
 
