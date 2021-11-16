@@ -29,7 +29,7 @@ const resourceSpecs = [
   {
     name: "copy text file",
     source: "./src/text.txt",
-    destination: "./dist"
+    destination: `./${outDir}`
   }
 ];
 
