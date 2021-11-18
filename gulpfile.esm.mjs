@@ -6,7 +6,7 @@ import mocha from "gulp-mocha";
 import { rollup } from "rollup";
 import copy from "deep-copy-all";
 
-import { outDir, allInput, lintInput } from "./rollup/options.mjs";
+import * as roptions from "./rollup/options.mjs";
 import * as prodOptions from "./rollup/rollup.production.mjs";
 import * as devOptions from "./rollup/rollup.development.mjs";
 
@@ -18,7 +18,10 @@ const mochaOptions = require("./.mocharc.json");
 // clean
 //
 async function cleanTask() {
-  return del([`${outDir}/**`, `!${outDir}/`]);
+  return del([
+    `${roptions.directories.out}/**`, `!${roptions.directories.out}/`,
+    `${roptions.directories.coverage}/**`, `!${roptions.directories.coverage}/`
+  ]);
 }
 gulp.task("clean", cleanTask);
 
@@ -29,7 +32,7 @@ const resourceSpecs = [
   {
     name: "copy text file",
     source: "./src/text.txt",
-    destination: `./${outDir}`
+    destination: `./${roptions.directories.out}`
   }
 ];
 
@@ -46,6 +49,18 @@ const resources = resourceSpecs.reduce((acc, spec) => {
 
 const copyResourcesTask = gulp.series(...resources);
 
+// test
+//
+async function mochaTask() {
+  await gulp.src(roptions.outputs.test.file)
+    .on("error", (err) => {
+      console.log(`*** test bundle: '${roptions.testOutputOptions.file}' missing; please build first!`);
+      console.log(`${err}`);
+    })
+    .pipe(mocha(mochaOptions));
+}
+gulp.task("mocha", mochaTask);
+
 // production
 //
 async function productionSourceTask() {
@@ -58,18 +73,17 @@ async function productionTestTask() {
   await bundle.write(prodOptions.test.output);
 }
 
-async function productionMochaTask() {
-  await gulp.src(prodOptions.test.output.file)
-    .pipe(mocha(mochaOptions));
-}
-gulp.task("prod-mocha", productionMochaTask);
-
-const productionTask = gulp.series(
+const productionBuildTask = gulp.series(
   cleanTask,
   productionSourceTask,
   productionTestTask,
-  copyResourcesTask,
-  productionMochaTask
+  copyResourcesTask
+);
+gulp.task("build-prod", productionBuildTask);
+
+const productionTask = gulp.series(
+  productionBuildTask,
+  mochaTask
 );
 gulp.task("prod", productionTask);
 
@@ -85,18 +99,17 @@ async function developmentTestTask() {
   await bundle.write(devOptions.test.output);
 }
 
-async function developmentMochaTask() {
-  await gulp.src(devOptions.test.output.file)
-    .pipe(mocha(mochaOptions));
-}
-gulp.task("dev-mocha", developmentMochaTask);
-
-const developmentTask = gulp.series(
+const developmentBuildTask = gulp.series(
   cleanTask,
   developmentSourceTask,
   developmentTestTask,
-  copyResourcesTask,
-  developmentMochaTask
+  copyResourcesTask
+);
+gulp.task("build-dev", developmentBuildTask);
+
+const developmentTask = gulp.series(
+  developmentBuildTask,
+  mochaTask
 );
 gulp.task("dev", developmentTask);
 
@@ -107,14 +120,14 @@ const beforeWatch = gulp.series(cleanTask, watchSequence);
 
 async function watchTask() {
   beforeWatch();
-  gulp.watch(allInput, watchSequence);
+  gulp.watch(roptions.inputs.all, watchSequence);
 }
 gulp.task("watch", watchTask);
 
 // lint
 //
 async function lintTask() {
-  gulp.src(lintInput)
+  gulp.src(roptions.inputs.lint)
     .pipe(eslint(lintOptions))
     .pipe(eslint.format());
 }
@@ -123,7 +136,7 @@ gulp.task("lint", lintTask);
 async function fixTask() {
   const withFix = copy(lintOptions);
   withFix.fix = true;
-  gulp.src(lintInput)
+  gulp.src(roptions.inputs.lint)
     .pipe(eslint(withFix))
     .pipe(eslint.format())
     .pipe(gulp.dest(file => file.base));
