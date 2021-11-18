@@ -160,7 +160,7 @@ After the client project has been created from this template, a number of change
 
 ## :warning: A note about 'vulnerablities' in dev dependencies
 
-An [issue](#issues/17) was raised to try and resolve the problem of _npm audit_ reporting so called vulnerabilities (all relating to gulp dependencies). However, after a lot of head scratching and many failed attempts to resolve, it was discovered that there is a design flaw with _npm audit_. This is a widely known issue and very well documented at a blog post [npm audit: Broken by Design](https://overreacted.io/npm-audit-broken-by-design/). It is for the reasons documented here, that there is no need to attempt to resolve these issues. A custom _audit_ package.json script entry has been defined that specifies the __--production__ flag, (just run `npm run audit`).
+An [issue](https://github.com/Snivilization/nodejs-esm-starter/issues/17) was raised to try and resolve the problem of _npm audit_ reporting so called vulnerabilities (all relating to gulp dependencies). However, after a lot of head scratching and many failed attempts to resolve, it was discovered that there is a design flaw with _npm audit_. This is a widely known issue and very well documented at a blog post [npm audit: Broken by Design](https://overreacted.io/npm-audit-broken-by-design/). It is for the reasons documented here, that there is no need to attempt to resolve these issues. A custom _audit_ package.json script entry has been defined that specifies the __--production__ flag, (just run `npm run audit`).
 
 ## :checkered_flag: Other external resources
 
