@@ -1,4 +1,4 @@
-# nodejs-esm-starter
+# :airplane: nodejs-esm-starter
 
 ___Starter project for NodeJs esm packages, with [rollup](https://rollupjs.org), [typescript](https://www.typescriptlang.org/), [mocha](https://mochajs.org/), [chai](https://www.chaijs.com/), [eslint](https://eslint.org/), [istanbul/nyc](https://istanbul.js.org/), [gulp](https://gulpjs.com/)___
 
@@ -6,7 +6,7 @@ ___Starter project for NodeJs esm packages, with [rollup](https://rollupjs.org),
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
 [![typescript](https://img.shields.io/badge/TypeScript-007ACC?flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-:crown: This starter was created from the information gleaned from the excellent suite of articles written by 'Gil Tayar': [Using ES Modules (ESM) in Node.js: A Practical Guide (Part 1)](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-1/), which I would highly recommend to anyone wishing to get a full understanding of ESM modules with NodeJS and provides the full picture lacking in other offical documentation sources/blogs.
+:crown: This starter was created from the information gleaned from the excellent suite of articles written by 'Gil Tayar': [Using ES Modules (ESM) in Node.js: A Practical Guide (Part 1)](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-1/), which I would highly recommend to anyone wishing to get a full understanding of ESM modules with NodeJS and provides the full picture lacking in other offical documentation sources/blogs. The following description contains links into the relevant parts of Gil Tayar's blog series.
 
 ## :gift: package.json features
 
@@ -102,7 +102,7 @@ The '.' entry inside exports is what gives us this dual mode capability:
 
 NB: we write our __rollup__ config in a .mjs file because rollup assumes .js is commonjs, so we are forced to use .mjs, regardless of the fact that our package has been marked as __esm__ via the package.json __type__ property.
 
-##### The 'files' entry
+##### :page_with_curl: The 'files' entry
 
 ```json
   "files": [
@@ -115,21 +115,21 @@ NB: we write our __rollup__ config in a .mjs file because rollup assumes .js is 
 
 Required for dual-mode package.
 
-## Boilerplate project structure
+## :open_file_folder: Boilerplate project structure
 
 All _rollup_ related funcitonality is contained within the rollup folder. Currently, there is a separate file for development and production. The main difference between the production and development rollup configs is that for the former, we use the terser plugin to mangle the generated javascript bundle.
 
-### options/production/development
+### :books: options/production/development
 
 The setup is structured to keep the gulp config encapulated away from the rollup config. This means that the user can discard gulp if they so wish to without it affecting the rollup. The flow of data goes from the root, that being ___rollup/options.mjs___, to either ___rollup.development.mjs___ or ___rollup.production.mjs___ dependending on the current _mode_ which is then finally imported into the gulp file ___gulpfile.esm.mjs___.
 
 It is intended that the user should specify all generic settings in the options.mjs file and export them from there. This way, we can ensure that any properties are defined in a single place only and inherited as required. Clearly, production specific settings should go in the production file and like-wise for development.
 
-### gulp file (gulpfile.esm.mjs)
+### :beers: gulp file (gulpfile.esm.mjs)
 
 In order to simplify usage of gulp in the presence of the alternative gulfile name being ___gulpfile.esm.mjs___ (as opposed to the default of simply being ___gulpfile.mjs___), a symbolic link has been defined from ___gulpfile.mjs___ to ___gulpfile.esm.mjs___. This means that the user can run gulp commands without having to explicitly define the gulp file ___gulpfile.esm.mjs___.
 
-#### Copying resources
+#### :heavy_plus_sign: Copying resources
 
 The gulp file, contains an array definition __resourceSpecs__. By default it contains a single dummy entry that illustrates how to define resource(s) to be copied into the output folder. Each entry in the array should be an object eg:
 
@@ -143,7 +143,7 @@ The gulp file, contains an array definition __resourceSpecs__. By default it con
 
 A _copyTask_ is defined composed from a series of tasks defined by __resourceSpecs__. If no resources are to be copied, then just remove this default entry and leave the array to be empty.
 
-## Using this template
+## :rocket: Using this template
 
 After the client project has been created from this template, a number of changes need to be made and are listed as follows:
 
@@ -152,17 +152,17 @@ After the client project has been created from this template, a number of change
 + remove the dummy tests and source dode.
 + ... and then of course, customise the configs as required.
 
-## Required dev depenencies of note
+## :construction: Required dev depenencies of note
 
 + :hammer: dual mode package [rollup](https://www.rollupjs.org) ([npm](https://www.npmjs.com/package/rollup))
 + :hammer: platform independent copy of non js assets [cpr](https://github.com/davglass/cpr) ([npm](https://www.npmjs.com/package/cpr))
 + :hammer: merge json objects (used to derive test rollup config from the source config) [deepmerge](https://github.com/TehShrike/deepmerge) ([npm](https://www.npmjs.com/package/deepmerge))
 
-## A note about 'vulnerablities' in dev dependencies
+## :warning: A note about 'vulnerablities' in dev dependencies
 
-An [issue](#17) was raised to try and resolve the problem of _npm audit_ reporting so called vulnerabilities (all relating to gulp dependencies). However, after a lot of head scratching and many failed attempts to resolve, it was discovered that there is a design flaw with _npm audit_. This is a widely known issue and very well documented at a blog post [npm audit: Broken by Design](https://overreacted.io/npm-audit-broken-by-design/). It is for the reasons documented here, that there is no need to attempt to resolve these issues. A custom _audit_ package.json script entry has been defined that specifies the _--production__ flag, (just run `npm run audit`).
+An [issue](#issues/17) was raised to try and resolve the problem of _npm audit_ reporting so called vulnerabilities (all relating to gulp dependencies). However, after a lot of head scratching and many failed attempts to resolve, it was discovered that there is a design flaw with _npm audit_. This is a widely known issue and very well documented at a blog post [npm audit: Broken by Design](https://overreacted.io/npm-audit-broken-by-design/). It is for the reasons documented here, that there is no need to attempt to resolve these issues. A custom _audit_ package.json script entry has been defined that specifies the __--production__ flag, (just run `npm run audit`).
 
-## Other external resources
+## :checkered_flag: Other external resources
 
 Here's a list of other links that were consulted duration the creation of this starter template
 
