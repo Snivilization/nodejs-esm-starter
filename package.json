@@ -16,20 +16,21 @@
     "node": ">=14.17.0"
   },
   "scripts": {
+    "clean": "gulp clean",
+    "build": "gulp build-prod",
+    "build:d": "gulp build-dev",
     "prod": "gulp prod",
     "dev": "gulp dev",
     "watch": "gulp watch",
     "lint": "gulp lint",
     "fix": "gulp fix",
-    "clean": "gulp clean",
-    "remm": "rm -rf node_modules",
-    "test": "gulp prod-mocha",
-    "test:d": "gulp dev-mocha",
-    "audit": "npm audit --production",
+    "test": "gulp mocha",
+    "coverage": "nyc --reporter=lcov --reporter=text npm run test",
     "exec": "node ./dist/nodejs-esm-starter-bundle.js",
-    "coverage": "nyc --reporter=lcov --reporter=text npm run test:d"
+    "audit": "npm audit --production",
+    "dep": "echo 'todo: define a dependency checker like npm-check-updates (ncu) or depcheck'",
+    "remm": "rm -rf node_modules"
   },
-  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Snivilization/nodejs-esm-starter.git"

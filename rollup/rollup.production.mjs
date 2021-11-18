@@ -10,37 +10,34 @@ import typescript from "@rollup/plugin-typescript";
 // generate multiple outputs for the same input, they can do so,
 // by setting up the output property as an array of outputs, so
 // they can for example generate un-minimised and minimised
-// assets for the same input. Each output entity can can contain
+// assets for the same input. Each output entity can contain
 // output specific plugins.
 //
-const sourceOutput = copy(roptions.outputOptions);
-sourceOutput.file = roptions.bundleName({
-  discriminator: "src"
-});
-sourceOutput.plugins = roptions.productionPlugins;
+const sourceOutput = copy(roptions.outputs.source);
+sourceOutput.plugins = roptions.plugins.production;
 
 const source = {
-  input: roptions.input,
+  input: roptions.inputs.main,
   output: sourceOutput,
-  plugins: [...roptions.universalPlugins, typescript({
-    tsconfig: `./${roptions.sourceTsConfigFilename}`
+  plugins: [...roptions.plugins.universal, typescript({
+    tsconfig: `./${roptions.ts.source.config.filename}`
   })],
   treeshake: roptions.treeshake
 };
 
 // test
 //
-const testOutput = copy(roptions.outputOptions);
+const testOutput = copy(roptions.outputs.test);
 testOutput.file = roptions.bundleName({
   discriminator: "test"
 });
 
 const test = {
-  input: roptions.testInput,
+  input: roptions.inputs.test,
   external: roptions.external,
   output: testOutput,
-  plugins: [...roptions.universalPlugins, typescript({
-    tsconfig: `./${roptions.testTsConfigFilename}`
+  plugins: [...roptions.plugins.universal, typescript({
+    tsconfig: `./${roptions.ts.test.config.filename}`
   }), multi()],
   treeshake: roptions.treeshake
 };
