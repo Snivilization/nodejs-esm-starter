@@ -152,6 +152,26 @@ After the client project has been created from this template, a number of change
 + remove the dummy tests and source dode.
 + ... and then of course, customise the configs as required.
 
+## :robot: Automated releases
+
+Releases have been automated using gulp's [Automate Releases recipe](https://gulpjs.com/docs/en/recipes/automate-releases/). However, this is just an initial setup. The user should become accustomed with the following concepts:
+
++ keeping a clean commit history with [conventional commits](https://www.conventionalcommits.org)
++ npm [version](https://docs.npmjs.com/cli/v8/commands/npm-version) command. But there is a caveat here. Conventional recommends not using npm version, but to use standard version instead (which is part of conventional-changelog).
++ automatic version number bumping [Conventional Recommended Bump](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-recommended-bump#readme)
++ using [conventional-changelog-cli](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli#readme) to generate a changelog from git metadata
++ Make a new GitHub release from git metadata with [conventional changelog](https://github.com/conventional-changelog/conventional-changelog)
+
+To run the full release, just run `npm run release`. Two methods have been defined for completing an automated release, see the following:
+
+:push_pin: __Gulp:__ this recipe recipe generates and publishes releases (including version number bumping, change log generation and tagging) to gihub. In it's current form, it does not publish to the npm registry, so the user will have to add this to the release chain. The gulp release has been defined as a script named "_gulp:rel"
+
+:push_pin: __[standard version:](https://github.com/conventional-changelog/standard-version)__ this is an alternative to what has been defined in the release gulp task and has been defined in package.json denoted by a script entry named "_standard:rel".
+
+By default, `release` has been set to use "standard", but this can be switched to use the "gulp" version instead.
+
+It should also be noted that there is a third way (not implemented mentioned here for reference), which is to use [semantic release](https://semantic-release.gitbook.io/semantic-release/).
+
 ## :construction: Required dev depenencies of note
 
 + :hammer: dual mode package [rollup](https://www.rollupjs.org) ([npm](https://www.npmjs.com/package/rollup))
@@ -160,7 +180,7 @@ After the client project has been created from this template, a number of change
 
 ## :warning: A note about 'vulnerablities' in dev dependencies
 
-An [issue](https://github.com/Snivilization/nodejs-esm-starter/issues/17) was raised to try and resolve the problem of _npm audit_ reporting so called vulnerabilities (all relating to gulp dependencies). However, after a lot of head scratching and many failed attempts to resolve, it was discovered that there is a design flaw with _npm audit_. This is a widely known issue and very well documented at a blog post [npm audit: Broken by Design](https://overreacted.io/npm-audit-broken-by-design/). It is for the reasons documented here, that there is no need to attempt to resolve these issues. A custom _audit_ package.json script entry has been defined that specifies the __--production__ flag, (just run `npm run audit`).
+An [issue](https://github.com/Snivilization/nodejs-esm-starter/issues/17) was raised to try and resolve the problem of _npm audit_ reporting so called vulnerabilities (mostly relating to gulp dependencies). However, after a lot of head scratching and many failed attempts to resolve, it was discovered that there is a design flaw with _npm audit_. This is a widely known issue and very well documented at a blog post [npm audit: Broken by Design](https://overreacted.io/npm-audit-broken-by-design/). It is for the reasons documented here, that there is no need to attempt to resolve these issues. A custom _audit_ package.json script entry has been defined that specifies the __--production__ flag, (just run `npm run audit`).
 
 ## :checkered_flag: Other external resources
 
