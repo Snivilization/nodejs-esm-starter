@@ -9,6 +9,7 @@ import copy from "deep-copy-all";
 import * as roptions from "./rollup/options.mjs";
 import * as prodOptions from "./rollup/rollup.production.mjs";
 import * as devOptions from "./rollup/rollup.development.mjs";
+import * as release from "./gulp/release.mjs";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -143,4 +144,16 @@ async function fixTask() {
 }
 gulp.task("fix", fixTask);
 
+// release
+//
+const releaseTask = gulp.series(
+  release.bumpVersion,
+  release.changelog,
+  release.commitTagPush,
+  release.githubRelease
+);
+gulp.task("release", releaseTask);
+
+// default
+//
 gulp.task("default", productionTask);

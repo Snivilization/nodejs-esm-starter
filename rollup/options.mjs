@@ -16,7 +16,7 @@ const main = "./src/main.ts";
 const sourceInput = ["src/**/*.ts"];
 const testInput = ["test/**/*.spec.ts"];
 const allInput = [...sourceInput, ...testInput];
-const lintInput = [...allInput, "./*.mjs", __filename];
+const lintInput = [...allInput, "./*.mjs", "./gulp/*.mjs", __filename];
 
 const inputs = {
   main: main,
@@ -31,7 +31,7 @@ const inputs = {
 const directories = {
   out: "dist",
   coverage: "coverage"
-}
+};
 
 const o = {
   format: "es",
@@ -84,7 +84,7 @@ const plugins = {
   production: [
     terser(minify)
   ]
-}
+};
 
 const ts = {
   source: {
@@ -97,7 +97,7 @@ const ts = {
       filename: "tsconfig.test.json"
     }
   }
-}
+};
 
 // note here, we specify name in the external list because we don't want to bundle
 // the source into the test bundle.
