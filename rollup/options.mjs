@@ -28,19 +28,15 @@ const inputs = {
 
 // Output
 //
-const directories = {
-  out: "dist",
-  coverage: "coverage"
-};
-
-const o = {
-  format: "es",
-  sourcemap: true
-};
 
 function hasProperty(info) {
   return Object.defineProperty.hasOwnProperty.call(info.obj, info.name);
 }
+
+const directories = {
+  out: "dist",
+  coverage: "coverage"
+};
 
 function bundleName(options) {
   if (options === null) {
@@ -53,6 +49,11 @@ function bundleName(options) {
 
   return result;
 }
+
+const o = {
+  format: "es",
+  sourcemap: true
+};
 
 const outputs = {
   source: {
@@ -112,6 +113,5 @@ export {
   ts,
   plugins,
   external,
-  treeshake,
-  bundleName
+  treeshake
 };
