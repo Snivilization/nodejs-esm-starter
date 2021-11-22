@@ -147,7 +147,12 @@ A _copyTask_ is defined composed from a series of tasks defined by __resourceSpe
 
 After the client project has been created from this template, a number of changes need to be made and are listed as follows:
 
-+ Update the `name` property inside package.json. Initially it will be set to _nodejs-esm-starter_. The user should perform a global search and replace inside package.js as there are other entries derived from this name. Ideally, there would be a way in json to be able to cross reference fields, but alas, this is not currently possible.
++ Update the `name` property inside package.json. Initially it will be set to _nodejs-esm-starter_. The user should perform a global search and replace inside package.js as there are other entries derived from this name. Ideally, there would be a way in json to be able to cross reference fields, but alas, this is not currently possible. The dummy unit tests also import the template project name, so these will have to be updated to use the real package name other wise the tests will fail due to an incorrect import.
++ add a __.env__ file to the root of the project. This will be used to store secrets when the time comes for performing a release. Initially, the user can simply set the contents to:
+
+> GH_TOKEN=ADD-KEY-HERE
+
+This can be taken literally, ie if you don't yet have a personal access token, then set it here to a dummy value
 + define resources to copy, if any.
 + remove the dummy tests and source dode.
 + ... and then of course, customise the configs as required.

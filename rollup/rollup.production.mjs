@@ -28,9 +28,6 @@ const source = {
 // test
 //
 const testOutput = copy(roptions.outputs.test);
-testOutput.file = roptions.bundleName({
-  discriminator: "test"
-});
 
 const test = {
   input: roptions.inputs.test,

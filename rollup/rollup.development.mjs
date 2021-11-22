@@ -21,10 +21,8 @@ const source = {
 //
 const test = copy(source);
 test.input = roptions.inputs.test;
+test.output = roptions.outputs.test;
 test.external = roptions.external;
-test.output.file = roptions.bundleName({
-  discriminator: "test"
-});
 
 test.plugins = [...test.plugins, typescript({
   tsconfig: `./${roptions.ts.test.config.filename}`
