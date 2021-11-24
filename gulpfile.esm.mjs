@@ -16,6 +16,25 @@ const require = createRequire(import.meta.url);
 const lintOptions = require("./.eslintrc.json");
 const mochaOptions = require("./.mocharc.json");
 
+import i18nextParser from "i18next-parser";
+const i18nChecker = i18nextParser.gulp;
+
+// i18next translation
+//
+const i18nOptions = {
+  // see https://github.com/i18next/i18next-parser for options list
+  //
+  locales: roptions.locales,
+  output: `${roptions.directories.locales}/$LOCALE/$NAMESPACE.json`
+};
+
+async function translationCheckTask() {
+  await gulp.src(roptions.inputs.source)
+    .pipe(new i18nChecker(i18nOptions))
+    .pipe(gulp.dest("./"));
+}
+gulp.task("i18next", translationCheckTask);
+
 // clean
 //
 async function cleanTask() {
@@ -30,6 +49,11 @@ gulp.task("clean", cleanTask);
 // this array. If non required, then set resourceSpecs to be an empty array.
 //
 const resourceSpecs = [
+  {
+    name: "copy locales",
+    source: "./locales/**/*.*",
+    destination: `./${roptions.directories.out}/locales/`
+  },
   {
     name: "copy text file",
     source: "./src/text.txt",
@@ -125,24 +149,66 @@ async function watchTask() {
 }
 gulp.task("watch", watchTask);
 
-// lint
+const ESL_DIRECTIVES = {
+  rules: {
+    names: {
+      "no-literal": "i18next/no-literal-string"
+    },
+    active: {
+      "off": 0,
+      "warn": 1,
+      "error": 2
+    }
+  }
+};
+
+// lint core
 //
-async function lintTask() {
+const lintOptionsCore = copy(lintOptions);
+lintOptionsCore.rules[ESL_DIRECTIVES.rules.names["no-literal"]] = ESL_DIRECTIVES.rules.active["off"];
+
+async function lintTaskCore() {
   gulp.src(roptions.inputs.lint)
-    .pipe(eslint(lintOptions))
+    .pipe(eslint(lintOptionsCore))
     .pipe(eslint.format());
 }
-gulp.task("lint", lintTask);
 
-async function fixTask() {
-  const withFix = copy(lintOptions);
+async function fixTaskCore() {
+  const withFix = copy(lintOptionsCore);
   withFix.fix = true;
   gulp.src(roptions.inputs.lint)
     .pipe(eslint(withFix))
     .pipe(eslint.format())
     .pipe(gulp.dest(file => file.base));
 }
-gulp.task("fix", fixTask);
+
+// lint i18next
+//
+const lintOptions18 = copy(lintOptions);
+lintOptions18.rules[ESL_DIRECTIVES.rules.names["no-literal"]] = ESL_DIRECTIVES.rules.active["error"];
+
+async function lintTask18() {
+  gulp.src(roptions.inputs.lint18)
+    .pipe(eslint(lintOptions18))
+    .pipe(eslint.format());
+}
+
+async function fixTask18() {
+  const withFix18 = copy(lintOptions18);
+  withFix18.fix = true;
+  gulp.src(roptions.inputs.lint18)
+    .pipe(eslint(withFix18))
+    .pipe(eslint.format())
+    .pipe(gulp.dest(file => file.base));
+}
+
+// lint sequences
+//
+const lintSequence = gulp.series(lintTaskCore, lintTask18);
+gulp.task("lint", lintSequence);
+
+const fixSequence = gulp.series(fixTaskCore, fixTask18);
+gulp.task("fix", fixSequence);
 
 // release
 //
