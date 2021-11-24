@@ -16,6 +16,7 @@ const main = "./src/main.ts";
 const sourceInput = ["src/**/*.ts"];
 const testInput = ["test/**/*.spec.ts"];
 const allInput = [...sourceInput, ...testInput];
+const lintInput18 = [...sourceInput];
 const lintInput = [...allInput, "./*.mjs", "./gulp/*.mjs", __filename];
 
 const inputs = {
@@ -23,7 +24,8 @@ const inputs = {
   source: sourceInput,
   test: testInput,
   all: allInput,
-  lint: lintInput
+  lint: lintInput,
+  lint18: lintInput18
 };
 
 // Output
@@ -35,7 +37,8 @@ function hasProperty(info) {
 
 const directories = {
   out: "dist",
-  coverage: "coverage"
+  coverage: "coverage",
+  locales: "locales"
 };
 
 function bundleName(options) {
@@ -106,12 +109,17 @@ const ts = {
 const external = ["chai", "mocha", "dirty-chai", name];
 const treeshake = true;
 
+// translation
+//
+const locales = ["en", "en-US"];
+
 export {
   inputs,
   outputs,
   directories,
   ts,
   plugins,
+  locales,
   external,
   treeshake
 };

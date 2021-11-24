@@ -1,6 +1,6 @@
 # :airplane: nodejs-esm-starter
 
-___Starter project for NodeJs esm packages, with [rollup](https://rollupjs.org), [typescript](https://www.typescriptlang.org/), [mocha](https://mochajs.org/), [chai](https://www.chaijs.com/), [eslint](https://eslint.org/), [istanbul/nyc](https://istanbul.js.org/), [gulp](https://gulpjs.com/)___
+___Starter project for NodeJs esm packages, with [rollup](https://rollupjs.org), [typescript](https://www.typescriptlang.org/), [mocha](https://mochajs.org/), [chai](https://www.chaijs.com/), [eslint](https://eslint.org/), [istanbul/nyc](https://istanbul.js.org/), [gulp](https://gulpjs.com/), [i18next](https://www.i18next.com/)___
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/standard/semistandard)
@@ -157,6 +157,16 @@ This can be taken literally, ie if you don't yet have a personal access token, t
 + remove the dummy tests and source dode.
 + ... and then of course, customise the configs as required.
 
+## :globe_with_meridians: i18next Translation ready
+
+This template comes complete with the initial boilerplate required for integration with [i18next](https://www.i18next.com/). It has been set up with English UK (en) set as the default alongside English US (en-US). If so required, this setup can easily be changed and more languages added as appropriate.
+
+If translation is not required, then it can be removed (dependencies: [i18next](https://www.npmjs.com/package/i18next) and [i18next-fs-backend](https://www.npmjs.com/package/i18next-fs-backend)) but it is highly recommended to leave it in. i18next can help in writing cleaner code. The biggest issue for users just starting with i18next is getting used to the idea that string literals should now never be used (see exceptions documented for the [eslint-plugin-i18next](https://www.npmjs.com/package/eslint-plugin-i18next) plugin) and this will be made evident by the linting process; in particular, the user is likely to see violations of the [i18next/no-literal-string](https://github.com/edvardchen/eslint-plugin-i18next#rule-no-literal-string) rule.
+
+The __lint__ gulp task will flag up translation violations and another gulp task __i18next__ has been implemented using [i18next-parser](https://www.npmjs.com/package/i18next-parser), which helps with the process of maintaining translations as the code base evoles.
+
+The __i18next/no-literal-string__ should really only be applied to user facing text content. For this reason, the project has been setup to only apply the rule to typescript files inside the "src" directory and not to unit tests, which would have become too onerous to manage.
+
 ## :robot: Automated releases
 
 Releases have been automated using gulp's [Automate Releases recipe](https://gulpjs.com/docs/en/recipes/automate-releases/). However, this is just an initial setup. The user should become accustomed with the following concepts:
@@ -169,9 +179,9 @@ Releases have been automated using gulp's [Automate Releases recipe](https://gul
 
 To run the full release, just run `npm run release`. Two methods have been defined for completing an automated release, see the following:
 
-:push_pin: __Gulp:__ this recipe recipe generates and publishes releases (including version number bumping, change log generation and tagging) to gihub. In it's current form, it does not publish to the npm registry, so the user will have to add this to the release chain. The gulp release has been defined as a script named "_gulp:rel"
+:pushpin: __Gulp:__ this recipe recipe generates and publishes releases (including version number bumping, change log generation and tagging) to gihub. In it's current form, it does not publish to the npm registry, so the user will have to add this to the release chain. The gulp release has been defined as a script named "_gulp:rel"
 
-:push_pin: __[standard version:](https://github.com/conventional-changelog/standard-version)__ this is an alternative to what has been defined in the release gulp task and has been defined in package.json denoted by a script entry named "_standard:rel".
+:pushpin: __[standard version:](https://github.com/conventional-changelog/standard-version)__ this is an alternative to what has been defined in the release gulp task and has been defined in package.json denoted by a script entry named "_standard:rel".
 
 By default, `release` has been set to use "standard", but this can be switched to use the "gulp" version instead.
 
@@ -182,6 +192,9 @@ It should also be noted that there is a third way (not implemented mentioned her
 + :hammer: dual mode package [rollup](https://www.rollupjs.org) ([npm](https://www.npmjs.com/package/rollup))
 + :hammer: platform independent copy of non js assets [cpr](https://github.com/davglass/cpr) ([npm](https://www.npmjs.com/package/cpr))
 + :hammer: merge json objects (used to derive test rollup config from the source config) [deepmerge](https://github.com/TehShrike/deepmerge) ([npm](https://www.npmjs.com/package/deepmerge))
++ :hammer: type definitions for [file system backend (npm)](https://www.npmjs.com/package/i18next-fs-backend) @types/i18next-fs-backend
++ :hammer: eslint plugin ([npm](https://www.npmjs.com/package/eslint-plugin-i18next))
++ :hammer: i18next-parser ([npm](https://www.npmjs.com/package/i18next-parser))
 
 ## :warning: A note about 'vulnerablities' in dev dependencies
 
