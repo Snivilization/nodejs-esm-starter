@@ -111,7 +111,7 @@ const treeshake = true;
 
 // translation
 //
-const locales = ["en", "en-US"];
+const locales = ["en", "en_US"];
 
 export {
   inputs,
