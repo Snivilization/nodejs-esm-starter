@@ -1,5 +1,5 @@
 
-import * as roptions from "./options.mjs";
+import roptions from "./options.mjs";
 import copy from "deep-copy-all";
 import multi from "rollup-plugin-multi-entry";
 import typescript from "@rollup/plugin-typescript";
@@ -29,4 +29,4 @@ test.plugins = [...test.plugins, typescript({
   tsconfig: `./${roptions.ts.test.config.filename}`
 }), multi()];
 
-export { source, test };
+export default { source, test };

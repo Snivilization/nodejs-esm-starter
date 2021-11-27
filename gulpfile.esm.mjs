@@ -6,10 +6,10 @@ import mocha from "gulp-mocha";
 import { rollup } from "rollup";
 import copy from "deep-copy-all";
 
-import * as roptions from "./rollup/options.mjs";
-import * as prodOptions from "./rollup/rollup.production.mjs";
-import * as devOptions from "./rollup/rollup.development.mjs";
-import * as release from "./gulp/release.mjs";
+import roptions from "./rollup/options.mjs";
+import poptions from "./rollup/rollup.production.mjs";
+import doptions from "./rollup/rollup.development.mjs";
+import release from "./gulp/release.mjs";
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -89,13 +89,13 @@ gulp.task("mocha", mochaTask);
 // production
 //
 async function productionSourceTask() {
-  const bundle = await rollup(prodOptions.source);
-  await bundle.write(prodOptions.source.output);
+  const bundle = await rollup(poptions.source);
+  await bundle.write(poptions.source.output);
 }
 
 async function productionTestTask() {
-  const bundle = await rollup(prodOptions.test);
-  await bundle.write(prodOptions.test.output);
+  const bundle = await rollup(poptions.test);
+  await bundle.write(poptions.test.output);
 }
 
 const productionBuildTask = gulp.series(
@@ -115,13 +115,13 @@ gulp.task("prod", productionTask);
 // development
 //
 async function developmentSourceTask() {
-  const bundle = await rollup(devOptions.source);
-  await bundle.write(devOptions.source.output);
+  const bundle = await rollup(doptions.source);
+  await bundle.write(doptions.source.output);
 }
 
 async function developmentTestTask() {
-  const bundle = await rollup(devOptions.test);
-  await bundle.write(devOptions.test.output);
+  const bundle = await rollup(doptions.test);
+  await bundle.write(doptions.test.output);
 }
 
 const developmentBuildTask = gulp.series(
