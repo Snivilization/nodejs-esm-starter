@@ -103,15 +103,20 @@ const ts = {
   }
 };
 
-// note here, we specify name in the external list because we don't want to bundle
-// the source into the test bundle.
-//
-const external = ["chai", "mocha", "dirty-chai", name];
+const externals = {
+  source: ["i18next", "i18next-cli-language-detector", "i18next-fs-backend"],
+
+  // note here, we specify name in the external list because we don't want to bundle
+  // the source into the test bundle.
+  //
+  test: ["chai", "mocha", "dirty-chai", name]
+}
+
 const treeshake = true;
 
 // translation
 //
-const locales = ["en", "en-US"];
+const locales = ["en", "en_US"];
 
 export {
   inputs,
@@ -120,6 +125,6 @@ export {
   ts,
   plugins,
   locales,
-  external,
+  externals,
   treeshake
 };

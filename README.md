@@ -18,7 +18,7 @@ ___Starter project for NodeJs esm packages, with [rollup](https://rollupjs.org),
 
 :mortar_board: See: [Using the .js extension for ESM](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-1/#using-the-.js-extension-for-esm)
 
-This entry makes the packaage an __esm__ module and means that we don't have to use the .mjs extension to indicate a module is __esm__; doing so causes problems with some tooling.
+This entry makes the package an __esm__ module and means that we don't have to use the .mjs extension to indicate a module is __esm__; doing so causes problems with some tooling.
 
 ### :gem: The 'exports' field
 
@@ -157,9 +157,34 @@ This can be taken literally, ie if you don't yet have a personal access token, t
 + remove the dummy tests and source dode.
 + ... and then of course, customise the configs as required.
 
+### Bundling with rollup
+<p align="right">
+	<a href="https://rollupjs.org/"><img src="https://rollupjs.org/logo.svg" width="50" /></a>
+</p>
+
+#### Maintaining external dependiences
+
+As the project grows, it is inevitable that more dependencies will be accumulated. The user should be aware that as the dependency list grows, if no other course of action is taken, rollup will automatically bundle those dependencies, which is typically not what we want. We use rollup to bundle all internal code, not all of the dependencies, which can easily be resolved externally. For this reason, the user should continuously monitor the contents of both the source and test bundles to make sure that it contains only what it should do. This is less important for the test bundle, because that will not ultimately be delivered to the end user, however, it would cloud the process of reviewing the contents of the test bundle.
+
+rollup allows specification of [external](https://rollupjs.org/guide/en/#external) entities. The rollup options [options.mjs](nodejs-esm-starter/rollup/options.mjs) in this template contains a default set of externals for both the source and test bundles, defined at __externals.source__ and __externals.test__ respectively. The user needs to update these externals as appropriate. Sometimes, if a an external is bundled, then a circular reference can occur and the user will see a message in the output such as illustrated below:
+
+```
+Synchronizing program
+CreatingProgramWith::
+  roots: ["/home/plastikfan/dev/github/snivilization/nodejs-esm-starter/test/banner.spec.ts","/home/plastikfan/dev/github/snivilization/nodejs-esm-starter/test/dummy.spec.ts","/home/plastikfan/dev/github/snivilization/nodejs-esm-starter/test/i18next/language-auto-detect.spec.ts"]
+  options: {"moduleResolution":2,"module":99,"resolveJsonModule":false,"allowJs":false,"alwaysStrict":true,"sourceMap":true,"noEmitOnError":true,"esModuleInterop":true,"forceConsistentCasingInFileNames":true,"noImplicitAny":true,"strict":true,"strictNullChecks":true,"skipLibCheck":true,"diagnostics":true,"lib":["lib.es2020.d.ts","lib.dom.d.ts"],"target":7,"configFilePath":"/home/plastikfan/dev/github/snivilization/nodejs-esm-starter/tsconfig.test.json","noEmitHelpers":true,"importHelpers":true,"noEmit":false,"emitDeclarationOnly":false,"noResolve":false}
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/addProperty.js -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/addProperty.js -> /home/plastikfan/dev/github/snivilization/nodejs-esm-starter/node_modules/chai/lib/chai.js?commonjs-proxy -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/addMethod.js -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/overwriteProperty.js -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/overwriteMethod.js -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/addChainableMethod.js -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/overwriteChainableMethod.js -> node_modules/chai/lib/chai.js
+```
+
 ## :globe_with_meridians: i18next Translation ready
 
-This template comes complete with the initial boilerplate required for integration with [i18next](https://www.i18next.com/). It has been set up with English UK (en) set as the default alongside English US (en-US). If so required, this setup can easily be changed and more languages added as appropriate.
+This template comes complete with the initial boilerplate required for integration with [i18next](https://www.i18next.com/). It has been set up with English GB (en) set as the default alongside English US (en-US). If so required, this setup can easily be changed and more languages added as appropriate. Please also see how to handle fallbacks in [i18next](https://www.i18next.com/principles/fallback).
 
 If translation is not required, then it can be removed (dependencies: [i18next](https://www.npmjs.com/package/i18next) and [i18next-fs-backend](https://www.npmjs.com/package/i18next-fs-backend)) but it is highly recommended to leave it in. i18next can help in writing cleaner code. The biggest issue for users just starting with i18next is getting used to the idea that string literals should now never be used (see exceptions documented for the [eslint-plugin-i18next](https://www.npmjs.com/package/eslint-plugin-i18next) plugin) and this will be made evident by the linting process; in particular, the user is likely to see violations of the [i18next/no-literal-string](https://github.com/edvardchen/eslint-plugin-i18next#rule-no-literal-string) rule.
 
@@ -175,17 +200,17 @@ Releases have been automated using gulp's [Automate Releases recipe](https://gul
 + npm [version](https://docs.npmjs.com/cli/v8/commands/npm-version) command. But there is a caveat here. Conventional recommends not using npm version, but to use standard version instead (which is part of conventional-changelog).
 + automatic version number bumping [Conventional Recommended Bump](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-recommended-bump#readme)
 + using [conventional-changelog-cli](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli#readme) to generate a changelog from git metadata
-+ Make a new GitHub release from git metadata with [conventional changelog](https://github.com/conventional-changelog/conventional-changelog)
++ Making a new GitHub release from git metadata with [conventional changelog](https://github.com/conventional-changelog/conventional-changelog)
 
 To run the full release, just run `npm run release`. Two methods have been defined for completing an automated release, see the following:
 
-:pushpin: __Gulp:__ this recipe recipe generates and publishes releases (including version number bumping, change log generation and tagging) to gihub. In it's current form, it does not publish to the npm registry, so the user will have to add this to the release chain. The gulp release has been defined as a script named "_gulp:rel"
+:pushpin: __Gulp:__ this recipe generates and publishes releases (including version number bumping, change log generation and tagging) to gihub. In it's current form, it does not publish to the npm registry, so the user will have to add this to the release chain. The gulp release has been defined as a script named "_gulp:rel"
 
 :pushpin: __[standard version:](https://github.com/conventional-changelog/standard-version)__ this is an alternative to what has been defined in the release gulp task and has been defined in package.json denoted by a script entry named "_standard:rel".
 
 By default, `release` has been set to use "standard", but this can be switched to use the "gulp" version instead.
 
-It should also be noted that there is a third way (not implemented mentioned here for reference), which is to use [semantic release](https://semantic-release.gitbook.io/semantic-release/).
+It should also be noted that there is a third way (not implemented, but mentioned here for reference), which is to use [semantic release](https://semantic-release.gitbook.io/semantic-release/).
 
 ## :construction: Required dev depenencies of note
 
@@ -193,7 +218,7 @@ It should also be noted that there is a third way (not implemented mentioned her
 + :hammer: platform independent copy of non js assets [cpr](https://github.com/davglass/cpr) ([npm](https://www.npmjs.com/package/cpr))
 + :hammer: merge json objects (used to derive test rollup config from the source config) [deepmerge](https://github.com/TehShrike/deepmerge) ([npm](https://www.npmjs.com/package/deepmerge))
 + :hammer: type definitions for [file system backend (npm)](https://www.npmjs.com/package/i18next-fs-backend) @types/i18next-fs-backend
-+ :hammer: eslint plugin ([npm](https://www.npmjs.com/package/eslint-plugin-i18next))
++ :hammer: i18next eslint plugin ([npm](https://www.npmjs.com/package/eslint-plugin-i18next))
 + :hammer: i18next-parser ([npm](https://www.npmjs.com/package/i18next-parser))
 
 ## :warning: A note about 'vulnerablities' in dev dependencies

@@ -19,6 +19,7 @@ sourceOutput.plugins = roptions.plugins.production;
 const source = {
   input: roptions.inputs.main,
   output: sourceOutput,
+  external: roptions.externals.source,
   plugins: [...roptions.plugins.universal, typescript({
     tsconfig: `./${roptions.ts.source.config.filename}`
   })],
@@ -31,7 +32,7 @@ const testOutput = copy(roptions.outputs.test);
 
 const test = {
   input: roptions.inputs.test,
-  external: roptions.external,
+  external: roptions.externals.test,
   output: testOutput,
   plugins: [...roptions.plugins.universal, typescript({
     tsconfig: `./${roptions.ts.test.config.filename}`
