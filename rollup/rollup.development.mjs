@@ -9,6 +9,7 @@ import typescript from "@rollup/plugin-typescript";
 const source = {
   input: roptions.inputs.main,
   output: roptions.outputs.source,
+  external: roptions.externals.source,
   plugins: [...roptions.plugins.universal, typescript({
     tsconfig: `./${roptions.ts.source.config.filename}`
   })],
@@ -22,7 +23,7 @@ const source = {
 const test = copy(source);
 test.input = roptions.inputs.test;
 test.output = roptions.outputs.test;
-test.external = roptions.external;
+test.external = roptions.externals.test;
 
 test.plugins = [...test.plugins, typescript({
   tsconfig: `./${roptions.ts.test.config.filename}`

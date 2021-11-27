@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Starter project for NodeJs esm packages, with rollup, typescript, mocha, chai, eslint, istanbul/nyc, gulp",
   "type": "module",
-  "main": "./dist/nodejs-esm-starter-src-bundle.js",
+  "main": "dist/nodejs-esm-starter-src-bundle.js",
   "exports": {
     ".": "./dist/nodejs-esm-starter-src-bundle.js",
     "./package.json": "./package.json"
@@ -27,7 +27,7 @@
     "check:18": "gulp i18next",
     "test": "gulp mocha",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test",
-    "exec": "node ./dist/infexor-src-bundle.js",
+    "exec": "node ./dist/nodejs-esm-starter-src-bundle.js",
     "audit": "npm audit --production",
     "dep": "echo 'todo: define a dependency checker like npm-check-updates (ncu) or depcheck'",
     "release": "npm run _standard:rel",
@@ -100,7 +100,7 @@
   },
   "dependencies": {
     "i18next": "^21.5.3",
-    "i18next-cli-language-detector": "^1.0.1",
+    "i18next-cli-language-detector": "^1.1.0-rc1",
     "i18next-fs-backend": "^1.1.4"
   }
 }

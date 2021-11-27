@@ -157,9 +157,34 @@ This can be taken literally, ie if you don't yet have a personal access token, t
 + remove the dummy tests and source dode.
 + ... and then of course, customise the configs as required.
 
+### Bundling with rollup
+<p align="right">
+	<a href="https://rollupjs.org/"><img src="https://rollupjs.org/logo.svg" width="50" /></a>
+</p>
+
+#### Maintaining external dependiences
+
+As the project grows, it is inevitable that more dependencies will be accumulated. The user should be aware that as the dependency list grows, if no other course of action is taken, rollup will automatically bundle those dependencies, which is typically not what we want. We use rollup to bundle all internal code, not all of the dependencies, which can easily be resolved externally. For this reason, the user should continuously monitor the contents of both the source and test bundles to make sure that it contains only what it should do. This is less important for the test bundle, because that will not ultimately be delivered to the end user, however, it would cloud the process of reviewing the contents of the test bundle.
+
+rollup allows specification of [external](https://rollupjs.org/guide/en/#external) entities. The rollup options [options.mjs](nodejs-esm-starter/rollup/options.mjs) in this template contains a default set of externals for both the source and test bundles, defined at __externals.source__ and __externals.test__ respectively. The user needs to update these externals as appropriate. Sometimes, if a an external is bundled, then a circular reference can occur and the user will see a message in the output such as illustrated below:
+
+```
+Synchronizing program
+CreatingProgramWith::
+  roots: ["/home/plastikfan/dev/github/snivilization/nodejs-esm-starter/test/banner.spec.ts","/home/plastikfan/dev/github/snivilization/nodejs-esm-starter/test/dummy.spec.ts","/home/plastikfan/dev/github/snivilization/nodejs-esm-starter/test/i18next/language-auto-detect.spec.ts"]
+  options: {"moduleResolution":2,"module":99,"resolveJsonModule":false,"allowJs":false,"alwaysStrict":true,"sourceMap":true,"noEmitOnError":true,"esModuleInterop":true,"forceConsistentCasingInFileNames":true,"noImplicitAny":true,"strict":true,"strictNullChecks":true,"skipLibCheck":true,"diagnostics":true,"lib":["lib.es2020.d.ts","lib.dom.d.ts"],"target":7,"configFilePath":"/home/plastikfan/dev/github/snivilization/nodejs-esm-starter/tsconfig.test.json","noEmitHelpers":true,"importHelpers":true,"noEmit":false,"emitDeclarationOnly":false,"noResolve":false}
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/addProperty.js -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/addProperty.js -> /home/plastikfan/dev/github/snivilization/nodejs-esm-starter/node_modules/chai/lib/chai.js?commonjs-proxy -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/addMethod.js -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/overwriteProperty.js -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/overwriteMethod.js -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/addChainableMethod.js -> node_modules/chai/lib/chai.js
+Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/overwriteChainableMethod.js -> node_modules/chai/lib/chai.js
+```
+
 ## :globe_with_meridians: i18next Translation ready
 
-This template comes complete with the initial boilerplate required for integration with [i18next](https://www.i18next.com/). It has been set up with English UK (en) set as the default alongside English US (en-US). If so required, this setup can easily be changed and more languages added as appropriate.
+This template comes complete with the initial boilerplate required for integration with [i18next](https://www.i18next.com/). It has been set up with English GB (en) set as the default alongside English US (en-US). If so required, this setup can easily be changed and more languages added as appropriate. Please also see how to handle fallbacks in [i18next](https://www.i18next.com/principles/fallback).
 
 If translation is not required, then it can be removed (dependencies: [i18next](https://www.npmjs.com/package/i18next) and [i18next-fs-backend](https://www.npmjs.com/package/i18next-fs-backend)) but it is highly recommended to leave it in. i18next can help in writing cleaner code. The biggest issue for users just starting with i18next is getting used to the idea that string literals should now never be used (see exceptions documented for the [eslint-plugin-i18next](https://www.npmjs.com/package/eslint-plugin-i18next) plugin) and this will be made evident by the linting process; in particular, the user is likely to see violations of the [i18next/no-literal-string](https://github.com/edvardchen/eslint-plugin-i18next#rule-no-literal-string) rule.
 
