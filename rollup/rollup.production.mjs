@@ -1,5 +1,5 @@
 
-import * as roptions from "./options.mjs";
+import roptions from "./options.mjs";
 import copy from "deep-copy-all";
 import multi from "rollup-plugin-multi-entry";
 import typescript from "@rollup/plugin-typescript";
@@ -40,4 +40,4 @@ const test = {
   treeshake: roptions.treeshake
 };
 
-export { source, test };
+export default { source, test };

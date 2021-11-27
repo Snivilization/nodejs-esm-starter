@@ -61,7 +61,7 @@ function githubRelease(done) {
   );
 }
 
-export {
+export default {
   bumpVersion,
   changelog,
   commitTagPush,

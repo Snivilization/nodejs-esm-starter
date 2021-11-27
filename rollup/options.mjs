@@ -118,7 +118,7 @@ const treeshake = true;
 //
 const locales = ["en", "en_US"];
 
-export {
+export default {
   inputs,
   outputs,
   directories,
