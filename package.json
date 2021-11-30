@@ -26,6 +26,7 @@
     "fix": "gulp fix",
     "check:18": "gulp i18next",
     "test": "gulp mocha",
+    "t": "gulp retest",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test",
     "exec": "node ./dist/nodejs-esm-starter-src-bundle.js",
     "audit": "npm audit --production",

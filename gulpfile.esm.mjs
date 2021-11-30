@@ -133,6 +133,20 @@ const developmentTask = gulp.series(
 );
 gulp.task("dev", developmentTask);
 
+// incremental development only test
+//
+async function cleanTestBundle() {
+  return del([
+    `${roptions.directories.out}/${roptions.outputs.test.file}`
+  ]);
+}
+const retestTask = gulp.series(
+  cleanTestBundle,
+  developmentTestTask,
+  mochaTask
+);
+gulp.task("retest", retestTask)
+
 // watch
 //
 const watchSequence = gulp.series(developmentSourceTask, developmentTestTask);
