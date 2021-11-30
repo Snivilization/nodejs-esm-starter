@@ -106,14 +106,39 @@ NB: we write our __rollup__ config in a .mjs file because rollup assumes .js is 
 
 ```json
   "files": [
-    "src",
-    "lib"
+    "dist"
   ],
 ```
+
+This dist entry should be changed to include those items required to be included in the package archive contents (see [files](https://docs.npmjs.com/cli/v8/configuring-npm/package-json#files) for more details). 
 
 :mortar_board: See: [Transpiling with Rollup](https://gils-blog.tayar.org/posts/using-jsm-esm-in-nodejs-a-practical-guide-part-2/#transpiling-esm-to-cjs-using-rollup)
 
 Required for dual-mode package.
+
+### :gem: NPM scripts
+
+| KEY-NAME              | DESCRIPTION
+| ----------------------| --------------------------------------------------------------------------------
+| clean                 | removes content of dist folder
+| build                 | builds production source and test bundles
+| build:d               | builds development source and test bundles
+| prod                  | runs the full production chain, clean, build bundles, run mocha tests
+| dev                   | development version of `prod`
+| watch                 | rebuilds development bundles then enters a watch rebuild loop
+| lint                  | runs eslint
+| fix                   | runs eslint with fix option enabled
+| check:18              | run [i18next-parser](https://www.npmjs.com/package/i18next-parser)
+| test                  | runs the mocha tests against the currently available test bundle
+| t                     | rebuilds the development test bundle and runs the tests
+| coverage              | runs nyc code coverage
+| exec                  | executes the source bundle
+| audit                 | runs npm audit on production dependencies
+| dep                   | by default not implemented but the user can specify a dependency checker like [npm-check-updates](https://www.npmjs.com/package/npm-check-updates) or [depcheck](https://www.npmjs.com/package/depcheck)
+| release               | run automated release process
+| standard:f            | run [standard-version](https://www.npmjs.com/package/standard-version) for first release
+| change:all            | run [conventional-changelog](https://www.npmjs.com/package/conventional-changelog) to generate a change log from git meta data
+| remm                  | remove _node_modules_ directory
 
 ## :open_file_folder: Boilerplate project structure
 
