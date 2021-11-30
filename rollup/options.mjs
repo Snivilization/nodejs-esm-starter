@@ -110,7 +110,7 @@ const externals = {
   // the source into the test bundle.
   //
   test: ["chai", "mocha", "dirty-chai", name]
-}
+};
 
 const treeshake = true;
 
