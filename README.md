@@ -48,14 +48,14 @@ Using the __exports__ field prevents deep linking into the package; we're are re
 This means we can use the name of the package on an import instead of a relative path, so a unit test could import like so:
 
 ```js
-import {banner} from 'nodejs-esm-starter'
+import starter from 'nodejs-esm-starter'
 ```
 
 However, there is still an issue with _self referencing_ like this. typescript will appear not be able to resolve that the package name, but in reality there is no problem. Therefore, we need to disable the resultant error. This is achieved at the import site with a typescript directive as illustarted below:
 
 ```js
 // @ts-ignore
-import {banner} from 'nodejs-esm-starter'
+import starter from 'nodejs-esm-starter'
 ```
 
 But that now throws up another issue. What we find now is that when we go to lint the project (just run `npm run lint`), we'll simply be served up an error message of the form:
@@ -131,13 +131,13 @@ In order to simplify usage of gulp in the presence of the alternative gulfile na
 
 #### :heavy_plus_sign: Copying resources
 
-The gulp file, contains an array definition __resourceSpecs__. By default it contains a single dummy entry that illustrates how to define resource(s) to be copied into the output folder. Each entry in the array should be an object eg:
+The gulp file, contains an array definition __resourceSpecs__. By default it contains a single entry (copies i18next translation locales) that illustrates how to define resource(s) to be copied into the output folder. Each entry in the array should be an object eg:
 
 ```js
   {
-    name: "copy text file",
-    source: "./src/text.txt",
-    destination: `./${outDir}`
+    name: "copy locales",
+    source: "./locales/**/*.*",
+    destination: `./${roptions.directories.out}/locales/`
   }
 ```
 
@@ -147,14 +147,24 @@ A _copyTask_ is defined composed from a series of tasks defined by __resourceSpe
 
 After the client project has been created from this template, a number of changes need to be made and are listed as follows:
 
-+ Update the `name` property inside package.json. Initially it will be set to _nodejs-esm-starter_. The user should perform a global search and replace inside package.js as there are other entries derived from this name. Ideally, there would be a way in json to be able to cross reference fields, but alas, this is not currently possible. The dummy unit tests also import the template project name, so these will have to be updated to use the real package name other wise the tests will fail due to an incorrect import.
++ Update the `name` property inside package.json. Initially it will be set to _nodejs-esm-starter_. The user should perform a global search and replace inside package.js as there are other entries derived from this name. Ideally, there would be a way in json to be able to cross reference fields, but alas, this is not currently possible.
 + add a __.env__ file to the root of the project. This will be used to store secrets when the time comes for performing a release. Initially, the user can simply set the contents to:
 
 > GH_TOKEN=ADD-KEY-HERE
 
 This can be taken literally, ie if you don't yet have a personal access token, then set it here to a dummy value
 + define resources to copy, if any.
-+ remove the dummy tests and source dode.
++ you will notice that there are unit tests defined for checking i18next setup (language-auto-detect.spec.ts)[test/i18next/language-auto-detect.spec.ts] and at the top of the file, the folling import is present:
+
+```js
+// @ts-ignore
+import starter from "nodejs-esm-starter";
+```
+
+This is a project self reference, so if the project has been renamed (let's say to _widget_), then this import statement will no longer be valid, so it should be changed to something like:
+
+> import widget from "widget"
+
 + ... and then of course, customise the configs as required.
 
 ### Bundling with rollup
@@ -166,7 +176,7 @@ This can be taken literally, ie if you don't yet have a personal access token, t
 
 As the project grows, it is inevitable that more dependencies will be accumulated. The user should be aware that as the dependency list grows, if no other course of action is taken, rollup will automatically bundle those dependencies, which is typically not what we want. We use rollup to bundle all internal code, not all of the dependencies, which can easily be resolved externally. For this reason, the user should continuously monitor the contents of both the source and test bundles to make sure that it contains only what it should do. This is less important for the test bundle, because that will not ultimately be delivered to the end user, however, it would cloud the process of reviewing the contents of the test bundle.
 
-rollup allows specification of [external](https://rollupjs.org/guide/en/#external) entities. The rollup options [options.mjs](nodejs-esm-starter/rollup/options.mjs) in this template contains a default set of externals for both the source and test bundles, defined at __externals.source__ and __externals.test__ respectively. The user needs to update these externals as appropriate. Sometimes, if a an external is bundled, then a circular reference can occur and the user will see a message in the output such as illustrated below:
+_rollup_ allows specification of [external](https://rollupjs.org/guide/en/#external) entities. The rollup options [options.mjs](nodejs-esm-starter/rollup/options.mjs) in this template contains a default set of externals for both the source and test bundles, defined at __externals.source__ and __externals.test__ respectively. The user needs to update these externals as appropriate. Sometimes, if a an external is bundled, then a circular reference can occur and the user will see a message in the output such as illustrated below:
 
 ```
 Synchronizing program
@@ -182,15 +192,17 @@ Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai
 Circular dependency: node_modules/chai/lib/chai.js -> node_modules/chai/lib/chai/utils/index.js -> node_modules/chai/lib/chai/utils/overwriteChainableMethod.js -> node_modules/chai/lib/chai.js
 ```
 
+... so to resolve this error, the dependency (in the above case _chai_) should be added to the list of external dependencies (previously mentioned) that needs to be externalised and thus not bundled.
+
 ## :globe_with_meridians: i18next Translation ready
 
-This template comes complete with the initial boilerplate required for integration with [i18next](https://www.i18next.com/). It has been set up with English GB (en) set as the default alongside English US (en-US). If so required, this setup can easily be changed and more languages added as appropriate. Please also see how to handle fallbacks in [i18next](https://www.i18next.com/principles/fallback).
+This template comes complete with the initial boilerplate required for integration with [i18next](https://www.i18next.com/). It has been set up with English GB (en-GB) set as the default alongside English US (en-US). If so required, this setup can easily be changed and more languages added as appropriate. Please also see how to handle fallbacks in [i18next](https://www.i18next.com/principles/fallback).
 
-If translation is not required, then it can be removed (dependencies: [i18next](https://www.npmjs.com/package/i18next) and [i18next-fs-backend](https://www.npmjs.com/package/i18next-fs-backend)) but it is highly recommended to leave it in. i18next can help in writing cleaner code. The biggest issue for users just starting with i18next is getting used to the idea that string literals should now never be used (see exceptions documented for the [eslint-plugin-i18next](https://www.npmjs.com/package/eslint-plugin-i18next) plugin) and this will be made evident by the linting process; in particular, the user is likely to see violations of the [i18next/no-literal-string](https://github.com/edvardchen/eslint-plugin-i18next#rule-no-literal-string) rule.
+If translation is not required, then it can be removed (dependencies: [i18next](https://www.npmjs.com/package/i18next) and [i18next-fs-backend](https://www.npmjs.com/package/i18next-fs-backend)) but it is highly recommended to leave it in. i18next can help in writing cleaner code eg [pluralisation](https://www.i18next.com/translation-function/plurals) of items referenced in user messages, is particularly useful along with an interesting take on [interpolation](https://www.i18next.com/translation-function/interpolation). The biggest issue for users just starting with i18next is getting used to the idea that string literals should now never be used (see exceptions documented for the [eslint-plugin-i18next](https://www.npmjs.com/package/eslint-plugin-i18next) plugin) and this will be made evident by the linting process; in particular, the user is likely to see violations of the [i18next/no-literal-string](https://github.com/edvardchen/eslint-plugin-i18next#rule-no-literal-string) rule.
 
-The __lint__ gulp task will flag up translation violations and another gulp task __i18next__ has been implemented using [i18next-parser](https://www.npmjs.com/package/i18next-parser), which helps with the process of maintaining translations as the code base evoles.
+The __lint__ gulp task will flag up translation violations and another gulp task __i18next__ has been implemented using [i18next-parser](https://www.npmjs.com/package/i18next-parser), which helps with the process of maintaining translations as the code base evolves.
 
-The __i18next/no-literal-string__ should really only be applied to user facing text content. For this reason, the project has been setup to only apply the rule to typescript files inside the "src" directory and not to unit tests, which would have become too onerous to manage.
+The __i18next/no-literal-string__ should really only be applied to user facing text content. For this reason, the project has been setup to only apply the rule to typescript files inside the "src" directory and not to unit tests, which would have become too onerous for the user to manage.
 
 ## :robot: Automated releases
 

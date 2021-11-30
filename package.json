@@ -4,13 +4,13 @@
   "description": "Starter project for NodeJs esm packages, with rollup, typescript, mocha, chai, eslint, istanbul/nyc, gulp",
   "type": "module",
   "main": "dist/nodejs-esm-starter-src-bundle.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/nodejs-esm-starter-src-bundle.js",
     "./package.json": "./package.json"
   },
   "files": [
-    "src",
-    "lib"
+    "dist"
   ],
   "engines": {
     "node": ">=14.17.0"
@@ -100,7 +100,7 @@
   },
   "dependencies": {
     "i18next": "^21.5.3",
-    "i18next-cli-language-detector": "^1.1.0-rc1",
+    "i18next-cli-language-detector": "^1.1.0",
     "i18next-fs-backend": "^1.1.4"
   }
 }
