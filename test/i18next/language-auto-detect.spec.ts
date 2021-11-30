@@ -6,31 +6,20 @@ import Backend from "i18next-fs-backend";
 import I18nextCLILanguageDetector from "i18next-cli-language-detector";
 
 // @ts-ignore
-// import { options } from "nodejs-esm-starter/i18next";
+import starter from "nodejs-esm-starter";
 
-const OUT = "dist";
-const EN = "en";
+const EN_GB = "en-GB";
 const EN_US = "en-US";
-const TRANSLATION = "translation";
-
-const inoptions = {
-  backend: {
-    loadPath: `./${OUT}/locales/{{lng}}/{{ns}}.json`
-  },
-  lng: EN,
-  fallbackLng: EN,
-  preload: [EN, EN_US],
-  ns: [TRANSLATION],
-  defaultNS: TRANSLATION
-};
 
 describe("i18next-cli-language-detector", () => {
   before(async () => {
     await i18next
       .use(I18nextCLILanguageDetector)
       .use(Backend)
-      .init(inoptions, (err, t) => {
-        if (err) return console.error(err);
+      .init(starter.i18nBackEndOptions, (err, t) => {
+        if (err) {
+          return console.error(err);
+        }
       });
   });
 
@@ -51,7 +40,7 @@ describe("i18next-cli-language-detector", () => {
     {
       given: "GB specifier",
       should: "get translation in GB dialect",
-      options: { lng: EN },
+      options: { lng: EN_GB },
       expected: "Internationalisation"
     },
     {

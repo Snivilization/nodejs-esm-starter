@@ -12,7 +12,7 @@ const __filename = new URL(import.meta.url).pathname;
 
 // Input
 //
-const main = "./src/main.ts";
+const main = "./src/index.ts";
 const sourceInput = ["src/**/*.ts"];
 const testInput = ["test/**/*.spec.ts"];
 const allInput = [...sourceInput, ...testInput];

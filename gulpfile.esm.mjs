@@ -53,11 +53,6 @@ const resourceSpecs = [
     name: "copy locales",
     source: "./locales/**/*.*",
     destination: `./${roptions.directories.out}/locales/`
-  },
-  {
-    name: "copy text file",
-    source: "./src/text.txt",
-    destination: `./${roptions.directories.out}`
   }
 ];
 
